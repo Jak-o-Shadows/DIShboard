@@ -1,37 +1,80 @@
 # DIShboard
-Program to listen to DIS (Distributed Interactive Simulation) messages, and allow them to be visualised, sorted, and filtered.
+A  web application for ingesting, storing, visualizing, sorting, and filtering DIS (Distributed Interactive Simulation) messages.
 
-## Design
- * Should be a web-app
- * HTMX for the GUI
- * Messages stored immediately into a SQL database to enable filtering via SQL
- * GUI should enable raw SQL input for filters, as well as something more human friendly
- * Should be one SQL table per PDU type
- * Should NOT have to be all hard-coded
+## Design Goals
+DIShboard is intended to be a simple, extensible observer for live DIS traffic with a focus on fast local analysis and data-driven filtering.
 
-### Pages
-There are multiple pages available to the user. Note that we want HTML to be the agent of state HATEOS - so avoid doing any
+Core goals:
+ * Web-first UX: build the interface as a responsive web application with server-rendered pages and progressive enhancement.
+ * HTMX-driven interactions: use HTML as the primary state carrier and keep dynamic interactions lightweight and declarative.
+ * Immediate persistence: ingest DIS messages in real time and persist them to a local SQL database so filtering and replay can be efficient.
+ * SQL-first query model: support both raw SQL filtering and higher-level query helpers so analysts can search by fields, time, entity, and PDU type.
+ * Schema flexibility: avoid hard-coding every PDU type
+ * Separation of concerns: keep message ingestion, storage, and UI rendering distinct enough to evolve independently.
+ * Minimal deployment friction: install as a standard Python package, run locally, and use simple tooling for development and documentation.
+ * Make the UI fully navigable without JavaScript when possible, while enhancing interactions with HTMX.
+ * Cross-platform
+
+Non-goals for the initial version:
+ * Replay of DIS
+ * A fully offline browser-only app; a lightweight backend is acceptable for UDP ingestion and database persistence.
+
+### Architecture Principles
+ * Keep the backend thin: ingest messages, store them, and render HTML pages.
+ * Keep the frontend simple: HTML templates, HTMX requests, and a small (tiny)amount of client-side behavior.
+ * Prefer explicit state: use query parameters, form submissions, and URL-driven navigation rather than hidden client-side state.
+ * Store raw payloads: preserve the original message content and add parsed metadata for filtering and display.
+ * Support extensibility: allow new PDU types and visualizations to be added without rewriting the core database schema.
+ * Use open-dis-python for DIS message parsing, serialization, and protocol compliance.
+ * Use Django as the web framework for handling requests, rendering templates, and managing the database.
+ * Use SQLite with write-ahead logging for local database persistence.
+ * Batch insert PDUs at approximately 20 Hz to balance real-time ingestion with performance.
+ * Refresh web pages at approximately 20 Hz for live updates using HTMX.
+ * Store each PDU type in a separate table for schema flexibility and efficient querying.
+
+#### Task Framework for DIS Ingestion
+DIShboard uses [django-tasks-db](https://github.com/RealOrangeOne/django-tasks-db) as the task backend to manage asynchronous operations, particularly for UDP ingestion of DIS PDUs. This ORM-based system stores tasks in the main Django database, reducing the need for external queue managers like Celery.
+
+- **UDP Listener as a Task**: The DIS PDU receiver runs as a background task using `asyncio` for non-blocking UDP socket operations. It buffers incoming PDUs in memory and batch-inserts them into the database at approximately 20 Hz to handle high-volume traffic (up to ~10,000 PDUs/s) without overwhelming SQLite.
+- **Task Management**: Configure tasks in `settings.py` with queues (e.g., "dis-ingestion"). Run the worker via `./manage.py db_worker --queues dis-ingestion` to process tasks asynchronously.
+- **Benefits**: Simplifies async handling, ensures persistence of task state, and allows for easy monitoring and pruning of completed tasks using built-in management commands.
+
+This keeps the architecture aligned with the "Separation of concerns" and "Minimal deployment friction" goals, while enabling real-time, scalable ingestion.
+
+## Pages
+The application should include a small set of focused pages that reflect common DIS analysis workflows.
 
 #### Connection Information
- // TODO
+ * Display current connection status and transport configuration.
+ * Show recent connection events, packet rate, and basic packet-level health indicators.
+ * Provide controls to start/stop listening and to configure the source endpoint or file replay.
 
 #### Messages
- * Where messages are displayed as they come in
+ * Show an incoming message stream with sortable, filterable rows.
+ * Support live refresh, incremental loading, and paging for large message volumes.
+ * Provide filters by time range, PDU type, source entity, and parsed PDU values.
+ * Allow raw SQL queries for advanced filtering alongside form-based controls.
+ * Preserve selected filters and list state in the URL so results are shareable and repeatable.
 
 #### Plots
- * Where some limited plots are shown
- * This is to be developed after the messages page
- * Plots are written in altair (ie. vega)
- * Example plot types include
-   * PDU's per second
-   * Entities alive
-   * Entities position (on a map)
-   * PDU type per second
+ * Provide simple summary visualizations for operational insight.
+ * Examples:
+   * PDU count per second
+   * Active entities over time
+   * Entity positions on a map-style coordinate plot
+   * PDU type distribution and trends
+ * Keep plots lightweight and declarative, using Altair/Vega.
+ * Enable plot generation from the same persisted message data that powers the message browser.
 
-### Install Goals
- * Should be an installable python project. Uses pyproject.toml, as it is the year 2026 (and hence setup.py should not be used). Is documented using Sphinx - both for the basic API docs, but also some long-form documentation (that should be moved out of here). Said long form documentation will be rendered to HTML and also served.
+## Install Goals
+ * Package the project with a standard `pyproject.toml` configuration.
+ * Use modern Python packaging conventions and avoid legacy `setup.py` usage.
+ * Document the project with Sphinx for both API documentation and user-facing guidance.
+ * Support local installation in a virtual environment and a simple startup command for development.
 
 ## Future Goals
- * Wholly contained in the web-page - no backend
-   * Not possibly currently as webpages cannot listen or send on raw UDP
- * Replay
+ * Support replay mode: ingest previously captured DIS traffic from a file or recording.
+ * Add richer analytics and saved filter sets for repeated investigations.
+ * Investigate a browser-only visualization mode once raw UDP capture is solved by external bridge or native capabilities.
+
+
