@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Entity ID</th>
+            <th>Position (X, Y, Z)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pdu in pdus %}
+        <tr>
+            <td class="timestamp">{{ pdu.timestamp|date:"H:i:s.u" }}</td>
+            <td>{{ pdu.site_id }}:{{ pdu.application_id }}:{{ pdu.entity_id }}</td>
+            <td>{{ pdu.pos_x|floatformat:2 }}, {{ pdu.pos_y|floatformat:2 }}, {{ pdu.pos_z|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">Waiting for traffic...</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

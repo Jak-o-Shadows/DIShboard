@@ -1,0 +1,11 @@
+<div id="ingestion-control">
+    {% if started %}
+    <div role="status" style="margin-bottom: 1rem; color: #8f8;">
+        Ingestion task queued. Start the worker with <code>python src/manage.py db_worker</code>.
+    </div>
+    {% else %}
+    <form hx-post="{% url 'start_ingestion' %}" hx-swap="outerHTML" hx-trigger="submit">
+        <button type="submit">Start DIS ingestion</button>
+    </form>
+    {% endif %}
+</div>

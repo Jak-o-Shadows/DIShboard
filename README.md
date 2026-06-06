@@ -18,6 +18,7 @@ Core goals:
 Non-goals for the initial version:
  * Replay of DIS
  * A fully offline browser-only app; a lightweight backend is acceptable for UDP ingestion and database persistence.
+ * Map view (probably using cesium JS)
 
 ### Architecture Principles
  * Keep the backend thin: ingest messages, store them, and render HTML pages.
@@ -77,3 +78,9 @@ The application should include a small set of focused pages that reflect common 
  * Investigate a browser-only visualization mode once raw UDP capture is solved by external bridge or native capabilities.
 
 
+## Developing
+
+To run:
+
+python src/manage.py runserver
+python src/manage.py db_worker

@@ -1,0 +1,19 @@
+[project]
+name = "dishboard"
+version = "0.1.0"
+description = "Distributed Interactive Simulation (DIS) Dashboard"
+dependencies = [
+    "Django>=6.0",
+    "django-htmx",
+    "django-tasks-db",
+    "opendis",
+    "altair",
+    "pandas",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
