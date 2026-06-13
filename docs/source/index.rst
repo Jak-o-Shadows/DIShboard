@@ -15,3 +15,9 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
+
+
+.. requirement:: Example of a requirement
+
+   This is an example of a requirement. It can be used to demonstrate the
+   functionality of the Sphinx-Needs extension.

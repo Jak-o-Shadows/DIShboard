@@ -1,0 +1,58 @@
+"$schema" = "https://ubcode.useblocks.com/ubproject.schema.json"
+
+[project]
+name = "DIShboard"
+srcdir = "../src"
+
+[needs]
+# Integrate with Sphinx-Needs
+external_needs = []
+
+[[needs.types]]
+directive = "requirement"
+title = "Requirement"
+prefix = "R_"
+color = "#BFD8D2"
+
+[[needs.types]]
+directive = "specification"
+title = "Specification"
+prefix = "S_"
+color = "#FEDCD2"
+
+# Link to API documentation
+[needs.links.api]
+incoming = "documented by"
+outgoing = "documents API"
+
+[parse]
+# Sphinx directive support
+[parse.extend_directives.automodule]
+argument = true
+options = true
+description = "Auto-document Python module"
+extension = "sphinx.ext.autodoc"
+
+[parse.extend_directives.automodule.named_options]
+members = {description = "Include module members"}
+undoc-members = {description = "Include undocumented members"}
+
+[parse.extend_roles.py-func]
+description = "Reference to Python function"
+extension = "sphinx.domains.python"
+
+[format_rst]
+# Sphinx-friendly formatting
+paragraph_line_length = 79  # PEP 8 line length
+directive_indent = 3
+field_list_indent = 2
+
+[scripts]
+# Sphinx build commands
+#html = "sphinx-build -b html {{confdir}} {{confdir}}/_build/html"
+#linkcheck = "sphinx-build -b linkcheck {{confdir}} {{confdir}}/_build/linkcheck"
+#"docs:live" = { cmd = "sphinx-autobuild {{confdir}} {{confdir}}/_build/html --host 0.0.0.0", terminal = "docs-server" }
+
+[server]
+# MCP server configuration
+index_on_save = true
