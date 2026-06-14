@@ -15,9 +15,43 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
+   asdf
+   
 
-
-.. requirement:: Example of a requirement
+.. req:: Example of a requirement
+   :id: REQ_EXAMPLE1
 
    This is an example of a requirement. It can be used to demonstrate the
    functionality of the Sphinx-Needs extension.
+
+
+
+Requirements & Specifications
+=============================
+
+.. needtable::
+   :types: requirement, specification
+   :columns: id, title, type, incoming, outgoing
+   :style: table
+
+Implementation & Verification Traceability
+===========================================
+This matrix automatically matches our functional specifications to our actual PyTest test cases and codebase implementations.
+
+.. needtable::
+   :types: test_case, code_impl
+   :columns: id, title, type, tests, implements
+   :style: line
+
+
+CODELINKS
+=========
+
+.. src-trace::
+   :project: dishboard
+
+
+Source Code API Documentation
+=============================
+Below is the automatically generated documentation pulled directly from our Python source code.
+

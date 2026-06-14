@@ -4,26 +4,88 @@
 name = "DIShboard"
 srcdir = "../src"
 
+
+
+################ NEEEDS CONFIGURATION ################
 [needs]
 # Integrate with Sphinx-Needs
 external_needs = []
 
 [[needs.types]]
-directive = "requirement"
+directive = "req"
 title = "Requirement"
-prefix = "R_"
+prefix = "REQ_"
 color = "#BFD8D2"
 
 [[needs.types]]
-directive = "specification"
+directive = "spec"
 title = "Specification"
-prefix = "S_"
+prefix = "SPEC_"
 color = "#FEDCD2"
+
+[[needs.types]]
+directive = "test_case"
+title = "Test Case"
+prefix = "TC_"
+color = "#D4EDDA" # Light green
+
+[[needs.types]]
+directive = "code_impl"
+title = "Implementation"
+prefix = "IMPL_"
+color = "#E2E3E5" # Light gray
+
+################ LINKS CONFIGURATION ################
+# Link for Specification -> Requirement (already standard)
+[needs.links.parent]
+incoming = "child of"
+outgoing = "parent to"
+
+# Link for Code -> Specification
+[needs.links.implements]
+incoming = "implemented by"
+outgoing = "implements"
+
+# Link for Test Case -> Code/Specification
+[needs.links.tests]
+incoming = "tested by"
+outgoing = "tests"
 
 # Link to API documentation
 [needs.links.api]
 incoming = "documented by"
 outgoing = "documents API"
+
+################# CONFIGURE CODELINKS (Traces python code & pytest files) ##
+[codelinks]
+set_local_url = true            # Set to true to enable local code html and URL generation
+local_url_field = "local-url"   # Need's field name for local URL
+set_remote_url = false           # Set to true to enable remote url to be generated
+
+# Define codelinks paths
+[codelinks.projects.dishboard.source_discover]
+src_dir = "../../"
+include = ["**/*.py"]
+gitignore = false
+
+[codelinks.projects.dishboard.analyse]
+get_oneline_needs = true
+
+# This defines the template for code tracing comments
+[codelinks.projects.dishboard.analyse.oneline_comment_style]
+start_sequence = "# @"
+end_sequence = "\n"
+field_split_char = ","
+# The structure of your in-code tracker: # @Title, ID, Type, Links
+needs_fields = [
+    { name = "title", type = "str" },
+    { name = "id", type = "str" },
+    { name = "type", type = "str", default = "code_impl" },
+    { name = "links", type = "list[str]", default = [] }
+]
+
+
+################### Other ##################
 
 [parse]
 # Sphinx directive support
