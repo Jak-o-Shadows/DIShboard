@@ -1,0 +1,22 @@
+<nav>
+    <ul>
+        <li>
+            <a href="{% url 'board:index' %}">Plots/Analysis</a>
+        </li>
+        <li>
+            <a href="{% url 'board:dis_live' %}">DIS Live</a>
+        </li>
+        <li>
+            <a href="{% url 'board:connection_info' %}">Connection Status</a>
+        </li>
+        <li>
+            <a href="{% url 'board:playback_selection' %}">Playback</a>
+        </li>
+    </ul>
+    <div id="connection-info-panel"
+         hx-get="{% url 'board:connection_info' %}"
+         hx-trigger="every 1s"
+         hx-swap="innerHTML">
+        {% include "partial_connection_info.html" %}
+    </div>
+</nav>

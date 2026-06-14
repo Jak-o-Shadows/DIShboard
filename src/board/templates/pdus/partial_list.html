@@ -1,0 +1,36 @@
+<div class="stream-summary">
+    <div><strong>{{ pdus|length }}</strong> latest</div>
+    <div><strong>{{ pdu_count }}</strong> total saved</div>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Type</th>
+            <th>Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pdu in pdus %}
+        <tr class="pdu-row" hx-get="{% url 'pdu_detail' pdu.pk %}" hx-trigger="click" hx-target="#detail-panel" hx-swap="innerHTML">
+            <td class="timestamp">{{ pdu.timestamp|date:"H:i:s.u" }}</td>
+            <td>{{ pdu.pdu_type_name }}</td>
+            <td>
+                {% if pdu.pdu_name == 'EntityStatePDU' %}
+                    {{ pdu.site_id }}:{{ pdu.application_id }}:{{ pdu.entity_id }} @ {{ pdu.pos_x|floatformat:1 }}, {{ pdu.pos_y|floatformat:1 }}, {{ pdu.pos_z|floatformat:1 }}
+                {% elif pdu.pdu_name == 'FirePDU' %}
+                    Firing {{ pdu.firing_site_id }}:{{ pdu.firing_application_id }}:{{ pdu.firing_entity_id }}
+                {% elif pdu.pdu_name == 'DetonationPDU' %}
+                    Detonation at {{ pdu.location_x|default:"?"|floatformat:1 }}, {{ pdu.location_y|default:"?"|floatformat:1 }}, {{ pdu.location_z|default:"?"|floatformat:1 }}
+                {% elif pdu.pdu_name == 'CollisionPDU' %}
+                    Collision between {{ pdu.issuing_site_id }}:{{ pdu.issuing_application_id }}:{{ pdu.issuing_entity_id }} and {{ pdu.colliding_site_id }}:{{ pdu.colliding_application_id }}:{{ pdu.colliding_entity_id }}
+                {% else %}
+                    {{ pdu.raw_payload|length }} bytes
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">Waiting for traffic...</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

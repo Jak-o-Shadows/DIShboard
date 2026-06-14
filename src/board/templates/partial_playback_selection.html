@@ -1,0 +1,14 @@
+<article id="playback-page">
+    <h1>Playback Selection</h1>
+    <section id="playback-card">
+        <p>Use this page to enqueue the built-in PDU sender task for playback testing.</p>
+        <form hx-post="{% url 'board:start_pdu_sender' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Start PDU playback sender</button>
+        </form>
+        {% if message %}
+        <p aria-live="polite">{{ message }}</p>
+        {% endif %}
+    </section>
+</article>

@@ -1,0 +1,27 @@
+<main id="dis-live">
+    <header>
+        <h1>DIS Live Stream</h1>
+        {% include 'ingestion_control.html' %}
+    </header>
+    <section id="dashboard-grid">
+        <section>
+            <header>
+                <h2>Live PDU Stream</h2>
+            </header>
+            <section id="pdu-container"
+                    hx-get="{% url 'board:pdu_list' %}"
+                    hx-trigger="every 5s"
+                    hx-swap="innerHTML">
+                {% include 'partial_pdu_list.html' %}
+            </section>
+        </section>
+        <section>
+            <header>
+                <h2>Selected PDU Details</h2>
+            </header>
+            <section id="detail-panel">
+                <p>Select a row in the left pane to inspect a PDU.</p>
+            </section>
+        </section>
+    </section>
+</main>

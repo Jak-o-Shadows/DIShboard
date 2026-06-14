@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'dishboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# @SQLite WAL mode and Django backend configuration, IMPL_SQLITE_WAL, code_impl, [SPEC_USE_DJANGO, SPEC_SQLITE_WAL]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

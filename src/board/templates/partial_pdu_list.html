@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         {% for pdu in pdus %}
-        <tr>
+        <tr class="pdu-row" hx-get="{% url 'board:pdu_detail' pdu.pk %}" hx-trigger="click" hx-target="#detail-panel" hx-swap="innerHTML">
             <td class="timestamp">{{ pdu.timestamp|date:"H:i:s.u" }}</td>
             <td>{{ pdu.site_id }}:{{ pdu.application_id }}:{{ pdu.entity_id }}</td>
             <td>{{ pdu.pos_x|floatformat:2 }}, {{ pdu.pos_y|floatformat:2 }}, {{ pdu.pos_z|floatformat:2 }}</td>

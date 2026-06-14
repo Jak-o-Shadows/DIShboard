@@ -1,0 +1,88 @@
+<section id="detail-card">
+    <h2>Selected PDU</h2>
+    {% if pdu %}
+        <dl>
+            <dt>Type</dt>
+            <dd>{{ pdu.pdu_name }}</dd>
+
+            <dt>Timestamp</dt>
+            <dd>{{ pdu.timestamp|date:"Y-m-d H:i:s.u" }}</dd>
+
+            <dt>Protocol Version</dt>
+            <dd>{{ pdu.protocol_version }}</dd>
+
+            <dt>Exercise ID</dt>
+            <dd>{{ pdu.exercise_id }}</dd>
+
+            {% if pdu.pdu_name == 'EntityStatePDU' %}
+                <dt>Site / Application / Entity</dt>
+                <dd>{{ pdu.site_id }} / {{ pdu.application_id }} / {{ pdu.entity_id }}</dd>
+
+                <dt>Position</dt>
+                <dd>{{ pdu.pos_x|floatformat:3 }}, {{ pdu.pos_y|floatformat:3 }}, {{ pdu.pos_z|floatformat:3 }}</dd>
+
+                <dt>Orientation</dt>
+                <dd>{{ pdu.psi|floatformat:3 }}, {{ pdu.theta|floatformat:3 }}, {{ pdu.phi|floatformat:3 }}</dd>
+
+                <dt>Entity Kind / Domain / Country</dt>
+                <dd>{{ pdu.entity_kind }} / {{ pdu.entity_domain }} / {{ pdu.entity_country }}</dd>
+            {% elif pdu.pdu_name == 'FirePDU' %}
+                <dt>Firing Entity</dt>
+                <dd>{{ pdu.firing_site_id }} / {{ pdu.firing_application_id }} / {{ pdu.firing_entity_id }}</dd>
+
+                <dt>Target Entity</dt>
+                <dd>{{ pdu.target_site_id }} / {{ pdu.target_application_id }} / {{ pdu.target_entity_id }}</dd>
+
+                <dt>Munition Entity</dt>
+                <dd>{{ pdu.munition_site_id }} / {{ pdu.munition_application_id }} / {{ pdu.munition_entity_id }}</dd>
+
+                <dt>Event</dt>
+                <dd>{{ pdu.event_site_id }} / {{ pdu.event_application_id }} / {{ pdu.event_id }}</dd>
+
+                <dt>Mission Index</dt>
+                <dd>{{ pdu.fire_mission_index }}</dd>
+            {% elif pdu.pdu_name == 'DetonationPDU' %}
+                <dt>Firing Entity</dt>
+                <dd>{{ pdu.firing_site_id }} / {{ pdu.firing_application_id }} / {{ pdu.firing_entity_id }}</dd>
+
+                <dt>Target Entity</dt>
+                <dd>{{ pdu.target_site_id }} / {{ pdu.target_application_id }} / {{ pdu.target_entity_id }}</dd>
+
+                <dt>Munition Entity</dt>
+                <dd>{{ pdu.munition_site_id }} / {{ pdu.munition_application_id }} / {{ pdu.munition_entity_id }}</dd>
+
+                <dt>Event</dt>
+                <dd>{{ pdu.event_site_id }} / {{ pdu.event_application_id }} / {{ pdu.event_id }}</dd>
+
+                <dt>Detonation Result</dt>
+                <dd>{{ pdu.detonation_result }}</dd>
+
+                <dt>Location</dt>
+                <dd>{{ pdu.location_x|default:"?" }}, {{ pdu.location_y|default:"?" }}, {{ pdu.location_z|default:"?" }}</dd>
+
+                <dt>Velocity</dt>
+                <dd>{{ pdu.velocity_x|default:"?" }}, {{ pdu.velocity_y|default:"?" }}, {{ pdu.velocity_z|default:"?" }}</dd>
+            {% elif pdu.pdu_name == 'CollisionPDU' %}
+                <dt>Issuing Entity</dt>
+                <dd>{{ pdu.issuing_site_id }} / {{ pdu.issuing_application_id }} / {{ pdu.issuing_entity_id }}</dd>
+
+                <dt>Colliding Entity</dt>
+                <dd>{{ pdu.colliding_site_id }} / {{ pdu.colliding_application_id }} / {{ pdu.colliding_entity_id }}</dd>
+
+                <dt>Collision Type</dt>
+                <dd>{{ pdu.collision_type }}</dd>
+
+                <dt>Location</dt>
+                <dd>{{ pdu.location_x|default:"?" }}, {{ pdu.location_y|default:"?" }}, {{ pdu.location_z|default:"?" }}</dd>
+
+                <dt>Velocity</dt>
+                <dd>{{ pdu.velocity_x|default:"?" }}, {{ pdu.velocity_y|default:"?" }}, {{ pdu.velocity_z|default:"?" }}</dd>
+            {% else %}
+                <dt>Raw Payload Size</dt>
+                <dd>{{ pdu.raw_payload|length }} bytes</dd>
+            {% endif %}
+        </dl>
+    {% else %}
+        <p class="empty-state">Select a PDU in the left pane to see details here.</p>
+    {% endif %}
+</section>
