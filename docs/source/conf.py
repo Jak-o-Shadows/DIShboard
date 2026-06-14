@@ -24,10 +24,32 @@ extensions = [
     "sphinx_needs",
     "sphinx_codelinks",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "autoapi.extension",
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
+
+########## Sphinx-AutoAPI configuration ##########
+autosummary_generate = True
+autodoc_default_options = {
+    "members": True,
+    "undoc-members": True,
+    "show-inheritance": True,
+    "inherited-members": True,
+}
+autoapi_type = "python"
+autoapi_dirs = [os.path.abspath("../../src")]
+autoapi_root = "api"
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+    "imported-members",
+]
+autoapi_keep_files = True
+autoapi_add_toctree_entry = False
 
 
 

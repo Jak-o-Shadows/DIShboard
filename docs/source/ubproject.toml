@@ -63,16 +63,39 @@ local_url_field = "local-url"   # Need's field name for local URL
 set_remote_url = false           # Set to true to enable remote url to be generated
 
 # Define codelinks paths
-[codelinks.projects.dishboard.source_discover]
-src_dir = "../../"
+#   Note that source & tests are separate, because otherwise it picks up on the "docs"
+#   folder, which seems to cause duplicate needs definitions
+[codelinks.projects.dishboard_source.source_discover]
+src_dir = "../../src/"
 comment_type = "python"
 gitignore = false
 
-[codelinks.projects.dishboard.analyse]
+[codelinks.projects.dishboard_source.analyse]
 get_oneline_needs = true
 
 # This defines the template for code tracing comments
-[codelinks.projects.dishboard.analyse.oneline_comment_style]
+[codelinks.projects.dishboard_source.analyse.oneline_comment_style]
+start_sequence = "@"
+#end_sequence = "\r\n"
+field_split_char = ","
+# The structure of your in-code tracker: @Title, ID, Type, Links
+needs_fields = [
+    { name = "title", type = "str" },
+    { name = "id", type = "str" },
+    { name = "type", type = "str", default = "code_impl" },
+    { name = "implements", type = "list[str]", default = [] }
+]
+
+[codelinks.projects.dishboard_tests.source_discover]
+src_dir = "../../tests/"
+comment_type = "python"
+gitignore = false
+
+[codelinks.projects.dishboard_tests.analyse]
+get_oneline_needs = true
+
+# This defines the template for code tracing comments
+[codelinks.projects.dishboard_tests.analyse.oneline_comment_style]
 start_sequence = "@"
 #end_sequence = "\r\n"
 field_split_char = ","

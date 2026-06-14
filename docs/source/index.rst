@@ -15,8 +15,7 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
-   asdf
-   
+   autodoc
 
 .. req:: Example of a requirement
    :id: REQ_EXAMPLE1
@@ -47,8 +46,18 @@ This matrix automatically matches our functional specifications to our actual Py
 CODELINKS
 =========
 
+Source
+~~~~~~
+
 .. src-trace::
-   :project: dishboard
+   :project: dishboard_source
+
+Tests
+~~~~~
+
+.. src-trace::
+   :project: dishboard_tests
+
 
 
 Source Code API Documentation
