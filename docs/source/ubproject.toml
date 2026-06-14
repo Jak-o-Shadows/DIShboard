@@ -65,7 +65,7 @@ set_remote_url = false           # Set to true to enable remote url to be genera
 # Define codelinks paths
 [codelinks.projects.dishboard.source_discover]
 src_dir = "../../"
-include = ["**/*.py"]
+comment_type = "python"
 gitignore = false
 
 [codelinks.projects.dishboard.analyse]
@@ -73,15 +73,15 @@ get_oneline_needs = true
 
 # This defines the template for code tracing comments
 [codelinks.projects.dishboard.analyse.oneline_comment_style]
-start_sequence = "# @"
-end_sequence = "\n"
+start_sequence = "@"
+#end_sequence = "\r\n"
 field_split_char = ","
-# The structure of your in-code tracker: # @Title, ID, Type, Links
+# The structure of your in-code tracker: @Title, ID, Type, Links
 needs_fields = [
     { name = "title", type = "str" },
     { name = "id", type = "str" },
     { name = "type", type = "str", default = "code_impl" },
-    { name = "links", type = "list[str]", default = [] }
+    { name = "implements", type = "list[str]", default = [] }
 ]
 
 
