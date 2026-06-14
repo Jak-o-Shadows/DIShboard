@@ -84,3 +84,9 @@ To run:
 
 python src/manage.py runserver
 python src/manage.py db_worker
+
+
+## See Also
+
+ * https://github.com/jvanlint/optics-v3/tree/main
+ * https://github.com/jvanlint/tacview2db

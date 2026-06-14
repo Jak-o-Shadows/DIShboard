@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "autoapi.extension",
+    "sphinx.ext.graphviz"
 ]
 
 templates_path = ['_templates']
@@ -64,3 +65,5 @@ html_static_path = ['_static']
 # Need both for it to work with Sphinx, rather than just ubCode
 needs_from_toml = "ubproject.toml"
 src_trace_config_from_toml = "ubproject.toml"
+
+needs_flow_engine = "graphviz"  # Not doing latex export, so graphviz is better

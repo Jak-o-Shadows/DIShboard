@@ -39,9 +39,11 @@ High-Level Requirements
 
 .. req:: Web-first responsive UI
    :id: REQ_WEB_FIRST_UX
-   :parent: REQ_PARENT
+   :parent: REQ_ANALYSIS_PLOTS
 
    Build a responsive web application with server-rendered pages and progressive enhancement.
+
+   Web-application because plotting libraries are just better
 
 .. req:: Real-time persistence of DIS messages
    :id: REQ_PERSISTENCE
@@ -57,7 +59,7 @@ High-Level Requirements
 
 .. req:: Shareable URL-driven filters
    :id: REQ_URL_STATE
-   :parent: REQ_PARENT
+   :parent: REQ_WEB_FIRST_UX
 
    Preserve selected filters and list state in URLs so views are shareable and repeatable.
 
@@ -66,6 +68,12 @@ High-Level Requirements
    :parent: REQ_PARENT
 
    The main goal of DIShboard
+
+.. req:: Analysis Plots
+   :id: REQ_ANALYSIS_PLOTS
+   :parent: REQ_ENGAGEMENT_BEHAVIOUR
+
+   Provide built-in analysis plots such as PDU rate over time, active entities, and spatial distributions to help users understand engagement dynamics.
 
 .. req:: Provide tools to investigate a DIS scenario
    :id: REQ_DIS_INVESTIGATION_TOOLS
@@ -93,7 +101,7 @@ High-Level Requirements
 
 .. req:: No-JavaScript-first navigation
    :id: REQ_NAVIGABLE_WITHOUT_JS
-   :parent: REQ_PARENT
+   :parent: REQ_WEB_FIRST_UX
 
    Make the UI fully navigable without JavaScript whenever possible, while enhancing interactions with HTMX.
 
@@ -335,6 +343,7 @@ Page Workflow Specifications
 
 .. spec:: Plots page
    :id: SPEC_PLOTS_PAGE
+   :parent: REQ_ANALYSIS_PLOTS
 
    Provide a plots page with lightweight summary visualizations such as PDU count per second, active entities over time, entity positions, and PDU type distribution.
    Render plots using Altair/Vega and derive visuals from the persisted message data.
@@ -401,3 +410,13 @@ Tests
 
 .. src-trace::
    :project: dishboard_tests
+
+
+GRAPH VIEW
+==========
+
+.. needflow::
+   :types: req, spec, test_case, code_impl
+   :show_legend:
+   :show_link_names:
+
