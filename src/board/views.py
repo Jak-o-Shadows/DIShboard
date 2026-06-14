@@ -141,7 +141,7 @@ def start_pdu_sender(request):
     })
 
 
-# @Connection information page, SPEC_CONNECTION_INFORMATION
+# @Connection information page, IMPL_CONNECTION_INFORMATION, code_impl, [SPEC_CONNECTION_INFORMATION]
 @hx_or_full(template_name='base.html')
 def connection_info(request):
     connected = _ingestion_task_is_running()
