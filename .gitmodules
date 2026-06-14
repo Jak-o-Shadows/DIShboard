@@ -1,0 +1,3 @@
+[submodule "dis-description"]
+	path = src/pdu_codegen/dis-description
+	url = https://github.com/open-dis/dis-description.git
