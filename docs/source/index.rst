@@ -326,6 +326,13 @@ These implementation choices support the high-level requirements without being t
 
    Translate DIS Entity Type 7-character record values (Kind, Domain, Country, Category, Subcategory, Specific, Extra) into valid MIL-STD-2525 symbol identification codes.
 
+.. spec:: Code-generation from XML PDU spec
+   :id: SPEC_PDU_CODE_GENERATION
+   :parent: REQ_SCHEMA_FLEXIBILITY, REQ_DIS_INVESTIGATION_TOOLS
+
+   Use XSLT transformations to generate Django model code and summary field templates from the official DIS PDU XML specification to support maintainability and traceability.
+
+
 Page Workflow Specifications
 ----------------------------
 
