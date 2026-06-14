@@ -115,6 +115,12 @@ High-Level Requirements
 
    Support replay of persisted DIS messages in the application
 
+.. req:: Re-emit DIS messages over the network
+   :id: REQ_DIS_REEMIT
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Support re-emitting persisted DIS messages over the network to a configurable endpoint for integration with external tools.
+
 .. req:: Replay DCS files
    :id: REQ_DCS_FILE_REPLAY
    :parent: REQ_ENGAGEMENT_BEHAVIOUR
@@ -181,6 +187,67 @@ High-Level Requirements
 
    Separate the system into ingestion/storage, translation, and rendering layers: raw DIS persistence remains distinct from scene generation, and the renderer consumes a translated scene model that supports DIS filters.
 
+.. req:: Configurable data retention limits
+   :id: REQ_DATA_RETENTION
+   :parent: REQ_PERSISTENCE
+
+   Provide a mechanism to prune old DIS messages automatically based on a configurable time horizon or database file size limit to prevent disk exhaustion.
+
+.. req:: Pre-ingestion network filtering
+   :id: REQ_NETWORK_FILTERING
+   :parent: REQ_PERSISTENCE
+
+   Allow configuration of hardware and network-level filters, such as Exercise ID or Site ID, to drop irrelevant PDUs before processing or database insertion.
+
+.. req:: Export filtered datasets
+   :id: REQ_DATA_EXPORT
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Support exporting the currently filtered view of DIS messages to standard data formats (e.g., CSV, JSON) for external analysis and reporting.
+
+.. req:: System health and error logging
+   :id: REQ_SYSTEM_HEALTH_LOGGING
+   :parent: REQ_PARENT
+
+   Maintain logs for system errors, ingestion dropped packets, and application warnings to aid in troubleshooting and system monitoring.
+
+.. spec:: Optimized database indexing
+   :id: SPEC_DB_INDEXING
+   :parent: SPEC_SQLITE_WAL, REQ_SQL_QUERY_MODEL
+
+   Maintain explicit database indexing on high-frequency query columns including Timestamp, PDU Type, Entity ID, and Exercise ID to ensure UI responsiveness.
+
+.. spec:: Resilient malformed packet handling
+   :id: SPEC_MALFORMED_PACKET_HANDLING
+   :parent: SPEC_OPEN_DIS_PY
+
+   Catch and log parser exceptions for malformed UDP packets without interrupting the main asyncio ingestion task or dropping healthy packets in the current batch.
+
+.. spec:: Multicast and broadcast support
+   :id: SPEC_MULTICAST_SUPPORT
+   :parent: SPEC_CONNECTION_INFORMATION
+
+   Ensure the UDP listener can be configured to join specific multicast groups or listen for general broadcast traffic on designated network interfaces.
+
+.. spec:: Secure default binding
+   :id: SPEC_LOCAL_BINDING
+   :parent: REQ_MINIMAL_DEPLOYMENT_FRICTION
+
+   Default the Django web server binding to localhost (127.0.0.1) to ensure the application remains a local desktop tool unless explicitly configured otherwise.
+
+.. spec:: Paginated message loading
+   :id: SPEC_PAGINATION_LIMITS
+   :parent: SPEC_MESSAGES_PAGE, SPEC_HTMX_INTERACTIONS
+
+   Implement strict pagination or HTMX-driven infinite scrolling limits on the messages page to prevent browser memory exhaustion when viewing millions of persisted rows.
+
+.. spec:: Real-time ingestion metrics
+   :id: SPEC_INGESTION_METRICS
+   :parent: REQ_SYSTEM_HEALTH_LOGGING, SPEC_CONNECTION_INFORMATION
+
+   Track and expose internal metrics for the UDP listener, including packets received per second, parse failures, and batch insert latency.
+
+
 Implementation Choices
 ----------------------
 
@@ -220,6 +287,36 @@ These implementation choices support the high-level requirements without being t
    :id: SPEC_OPEN_DIS_PY
 
    Use open-dis-python for DIS message parsing, serialization, and protocol compliance.
+
+.. spec:: Disconnect and timeout detection
+   :id: SPEC_TIMEOUT_DETECTION
+   :parent: SPEC_CONNECTION_INFORMATION
+
+   Mark entities as stale or inactive in the live view if no updated Entity State PDUs are received within a configurable timeout window.
+
+.. spec:: Asynchronous task control API
+   :id: SPEC_TASK_CONTROL_API
+   :parent: SPEC_CONNECTION_INFORMATION, SPEC_HTMX_INTERACTIONS
+
+   Expose endpoint controls via HTMX to trigger, pause, or terminate the background *db_worker* ingestion tasks from the user interface.
+
+.. spec:: PDU payload binary storage
+   :id: SPEC_BLOB_STORAGE
+   :parent: SPEC_SQLITE_WAL, REQ_DIS_REEMIT
+
+   Store the unaltered network bytes of every ingested DIS PDU in a dedicated BLOB column alongside the extracted field columns for absolute verification (and later re-emitting)
+
+.. spec:: Static assets compilation
+   :id: SPEC_STATIC_ASSETS
+   :parent: REQ_MINIMAL_DEPLOYMENT_FRICTION
+
+   Bundle all required frontend libraries (such as HTMX and Altair/Vega) locally within the Python package to avoid third-party CDN dependencies.
+
+.. spec:: MIL-STD-2525 symbol mapping
+   :id: SPEC_SYMBOL_MAPPING
+   :parent: REQ_USE_STANDARD_SYMBOLS, REQ_DIS_INVESTIGATION_TOOLS
+
+   Translate DIS Entity Type 7-character record values (Kind, Domain, Country, Category, Subcategory, Specific, Extra) into valid MIL-STD-2525 symbol identification codes.
 
 Page Workflow Specifications
 ----------------------------
