@@ -304,6 +304,33 @@ The range tool is the ability to do calculations based on the data from entities
 
    Calculate the specific energy (Energy Height) of an entity (potential + kinetic energy) to evaluate maneuverability and "energy-maneuverability" (EM) dogfight capability.
 
+Visualisation
+^^^^^^^^^^^^^
+
+.. req:: Scalar Metric Display
+   :id: REQ_RANGE_VISUAL_SCALAR
+   :parent: REQ_3D_OPERATIONAL_MAP
+
+   Display numerical data (e.g., Slant Range, Closure Rate, TTI) as HUD-style persistent labels
+   anchored to entities or measurement lines. Labels must support dynamic updates at the
+   render-cycle rate to ensure fluid visual performance.
+
+.. req:: Vector and Path Visualization
+   :id: REQ_RANGE_VISUAL_VECTOR
+   :parent: REQ_3D_OPERATIONAL_MAP
+
+   Render spatial relationships as lines or projections (e.g., Bearing, Line-of-Sight,
+   Intercept Paths). Visuals must support state-based styling, including color-coding
+   (e.g., red for obstructed/threat, green for clear/nominal) and dashed-line
+   representation for projected/predictive paths.
+
+.. req:: Spatial Volume Rendering
+   :id: REQ_RANGE_VISUAL_VOLUME
+   :parent: REQ_3D_OPERATIONAL_MAP
+
+   Render 3D geometric volumes (e.g., Sensor Cones, WEZ) as semi-transparent primitives.
+   These must support dynamic deformation based on the underlying entity's orientation
+   and state attributes (e.g., radar pitch, weapon max-range).
 
 
 Architecture
