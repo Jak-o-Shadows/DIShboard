@@ -159,6 +159,9 @@ High-Level Requirements
 
    Design the 3D display layer with inspiration from SIMDIS, emphasizing live operational asset state, entity tracking, and tactical event annotation.
 
+   Inspo:
+   * https://www.youtube.com/watch?v=MRKUV1nCEh8
+
 .. req:: Entity trajectory trails
    :id: REQ_ENTITY_TRAJECTORY_TRAILS
    :parent: REQ_SIMDIS_INSPIRED
