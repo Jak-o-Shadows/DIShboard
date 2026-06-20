@@ -36,26 +36,18 @@ High-Level Requirements
 
    This is a parent requirement that has child requirements. Used for visualisation in ubCode graph
 
-
-.. req:: Web-first responsive UI
-   :id: REQ_WEB_FIRST_UX
-   :parent: REQ_ANALYSIS_PLOTS
-
-   Build a responsive web application with server-rendered pages and progressive enhancement.
-
-   Web-application because plotting libraries are just better
-
-.. req:: Real-time persistence of DIS messages
-   :id: REQ_PERSISTENCE
-   :parent: REQ_DIS_INVESTIGATION_TOOLS
-
-   Ingest DIS messages in real time and persist them to a local SQL database for efficient filtering and replay.
-
-.. req:: Flexible SQL-first query model
-   :id: REQ_SQL_QUERY_MODEL
+.. req:: Show Engagement Behaviour
+   :id: REQ_ENGAGEMENT_BEHAVIOUR
    :parent: REQ_PARENT
 
-   Support raw SQL filtering and higher-level query helpers for time range, PDU type, entity, and parsed field searches.
+   The main goal of DIShboard
+
+
+
+
+
+User Experience
+---------------
 
 .. req:: Shareable URL-driven filters
    :id: REQ_URL_STATE
@@ -63,17 +55,10 @@ High-Level Requirements
 
    Preserve selected filters and list state in URLs so views are shareable and repeatable.
 
-.. req:: Show Engagement Behaviour
-   :id: REQ_ENGAGEMENT_BEHAVIOUR
-   :parent: REQ_PARENT
 
-   The main goal of DIShboard
 
-.. req:: Analysis Plots
-   :id: REQ_ANALYSIS_PLOTS
-   :parent: REQ_ENGAGEMENT_BEHAVIOUR
-
-   Provide built-in analysis plots such as PDU rate over time, active entities, and spatial distributions to help users understand engagement dynamics.
+Analysis Capability
+-------------------
 
 .. req:: Provide tools to investigate a DIS scenario
    :id: REQ_DIS_INVESTIGATION_TOOLS
@@ -81,29 +66,20 @@ High-Level Requirements
 
    Provide tools to investigate a DIS scenario
 
-.. req:: Schema flexibility for PDU types
-   :id: REQ_SCHEMA_FLEXIBILITY
-   :parent: REQ_PARENT
+.. req:: Replay DCS files
+   :id: REQ_DCS_FILE_REPLAY
+   :parent: REQ_ENGAGEMENT_BEHAVIOUR
 
-   Avoid hard-coding every PDU type schema and support extensible PDU type handling.
+   Support replay of DCS recording files into the 3D operational view, translating file contents into platform state and event playback while preserving DIS filters.
 
-.. req:: Separation of concerns
-   :id: REQ_SEPARATION_OF_CONCERNS
-   :parent: REQ_PARENT
+.. req:: Replay SIMDIS ASI files
+   :id: REQ_SIMDIS_ASI_REPLAY
+   :parent: REQ_ENGAGEMENT_BEHAVIOUR
 
-   Keep message ingestion, storage, and UI rendering distinct so the system can evolve independently.
+   Support replay of SIMDIS ASI files into the 3D operational view, translating file contents into platform state and event playback while preserving DIS filters.
 
-.. req:: Minimal deployment friction
-   :id: REQ_MINIMAL_DEPLOYMENT_FRICTION
-   :parent: REQ_PARENT
-
-   Package the project as a standard Python package and keep development tooling simple.
-
-.. req:: No-JavaScript-first navigation
-   :id: REQ_NAVIGABLE_WITHOUT_JS
-   :parent: REQ_WEB_FIRST_UX
-
-   Make the UI fully navigable without JavaScript whenever possible, while enhancing interactions with HTMX.
+3D Operational Display
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. req:: 3D operational map
    :id: REQ_3D_OPERATIONAL_MAP
@@ -117,35 +93,11 @@ High-Level Requirements
 
    Provide a 3D operational display of entities and events, with an interactive scene that supports filtering by DIS fields, entity, and PDU type.
 
-.. req:: Replay DIS messages from database
-   :id: REQ_DIS_MESSAGE_REPLAY
-   :parent: REQ_DIS_INVESTIGATION_TOOLS
-
-   Support replay of persisted DIS messages in the application
-
 .. req:: Allow DIS inspection in the 3D operational map
    :id: REQ_DIS_INSPECTION_3D_MAP
    :parent: REQ_LIVE_3D_OPERATIONAL_MAP, REQ_DIS_INVESTIGATION_TOOLS
 
    Allow users to click on entities and events in the 3D map to view detailed DIS message information that contributed to that scene element.
-
-.. req:: Re-emit DIS messages over the network
-   :id: REQ_DIS_REEMIT
-   :parent: REQ_DIS_INVESTIGATION_TOOLS
-
-   Support re-emitting persisted DIS messages over the network to a configurable endpoint for integration with external tools.
-
-.. req:: Replay DCS files
-   :id: REQ_DCS_FILE_REPLAY
-   :parent: REQ_ENGAGEMENT_BEHAVIOUR
-
-   Support replay of DCS recording files into the 3D operational view, translating file contents into platform state and event playback while preserving DIS filters.
-
-.. req:: Replay SIMDIS ASI files
-   :id: REQ_SIMDIS_ASI_REPLAY
-   :parent: REQ_ENGAGEMENT_BEHAVIOUR
-
-   Support replay of SIMDIS ASI files into the 3D operational view, translating file contents into platform state and event playback while preserving DIS filters.
 
 .. req:: TacView-inspired display
    :id: REQ_TACVIEW_INSPIRED
@@ -180,12 +132,6 @@ High-Level Requirements
 
    Provide orbit, pan, zoom, and center-on-entity view controls suitable for inspecting tactical scenes from multiple perspectives.
 
-.. req:: Playback and scrubber controls
-   :id: REQ_PLAYBACK_SCRUBBER_CONTROLS
-   :parent: REQ_TACVIEW_INSPIRED, REQ_SIMDIS_INSPIRED, REQ_DCS_FILE_REPLAY, REQ_SIMDIS_ASI_REPLAY, REQ_DIS_MESSAGE_REPLAY
-
-   Support replay controls including pause/resume, play speed, time scrubber, and jump-to-time for recorded scenarios.
-
 .. req:: Layer and symbol visibility control
    :id: REQ_LAYER_SYMBOL_CONTROL
    :parent: REQ_SIMDIS_INSPIRED
@@ -204,65 +150,22 @@ High-Level Requirements
 
    Separate the system into ingestion/storage, translation, and rendering layers: raw DIS persistence remains distinct from scene generation, and the renderer consumes a translated scene model that supports DIS filters.
 
-.. req:: Configurable data retention limits
-   :id: REQ_DATA_RETENTION
-   :parent: REQ_PERSISTENCE
+.. req:: Playback and scrubber controls
+   :id: REQ_PLAYBACK_SCRUBBER_CONTROLS
+   :parent: REQ_TACVIEW_INSPIRED, REQ_SIMDIS_INSPIRED, REQ_DCS_FILE_REPLAY, REQ_SIMDIS_ASI_REPLAY, REQ_DIS_MESSAGE_REPLAY
 
-   Provide a mechanism to prune old DIS messages automatically based on a configurable time horizon or database file size limit to prevent disk exhaustion.
+   Support replay controls including pause/resume, play speed, time scrubber, and jump-to-time for recorded scenarios.
 
-.. req:: Pre-ingestion network filtering
-   :id: REQ_NETWORK_FILTERING
-   :parent: REQ_PERSISTENCE
 
-   Allow configuration of hardware and network-level filters, such as Exercise ID or Site ID, to drop irrelevant PDUs before processing or database insertion.
+Analysis Plots
+~~~~~~~~~~~~~~
 
-.. req:: Export filtered datasets
-   :id: REQ_DATA_EXPORT
-   :parent: REQ_DIS_INVESTIGATION_TOOLS
+.. req:: Analysis Plots
+   :id: REQ_ANALYSIS_PLOTS
+   :parent: REQ_ENGAGEMENT_BEHAVIOUR
 
-   Support exporting the currently filtered view of DIS messages to standard data formats (e.g., CSV, JSON) for external analysis and reporting.
+   Provide built-in analysis plots such as PDU rate over time, active entities, and spatial distributions to help users understand engagement dynamics.
 
-.. req:: System health and error logging
-   :id: REQ_SYSTEM_HEALTH_LOGGING
-   :parent: REQ_PARENT
-
-   Maintain logs for system errors, ingestion dropped packets, and application warnings to aid in troubleshooting and system monitoring.
-
-.. spec:: Optimized database indexing
-   :id: SPEC_DB_INDEXING
-   :parent: SPEC_SQLITE_WAL, REQ_SQL_QUERY_MODEL
-
-   Maintain explicit database indexing on high-frequency query columns including Timestamp, PDU Type, Entity ID, and Exercise ID to ensure UI responsiveness.
-
-.. spec:: Resilient malformed packet handling
-   :id: SPEC_MALFORMED_PACKET_HANDLING
-   :parent: SPEC_OPEN_DIS_PY
-
-   Catch and log parser exceptions for malformed UDP packets without interrupting the main asyncio ingestion task or dropping healthy packets in the current batch.
-
-.. spec:: Multicast and broadcast support
-   :id: SPEC_MULTICAST_SUPPORT
-   :parent: SPEC_CONNECTION_INFORMATION
-
-   Ensure the UDP listener can be configured to join specific multicast groups or listen for general broadcast traffic on designated network interfaces.
-
-.. spec:: Secure default binding
-   :id: SPEC_LOCAL_BINDING
-   :parent: REQ_MINIMAL_DEPLOYMENT_FRICTION
-
-   Default the Django web server binding to localhost (127.0.0.1) to ensure the application remains a local desktop tool unless explicitly configured otherwise.
-
-.. spec:: Paginated message loading
-   :id: SPEC_PAGINATION_LIMITS
-   :parent: SPEC_MESSAGES_PAGE, SPEC_HTMX_INTERACTIONS
-
-   Implement strict pagination or HTMX-driven infinite scrolling limits on the messages page to prevent browser memory exhaustion when viewing millions of persisted rows.
-
-.. spec:: Real-time ingestion metrics
-   :id: SPEC_INGESTION_METRICS
-   :parent: REQ_SYSTEM_HEALTH_LOGGING, SPEC_CONNECTION_INFORMATION
-
-   Track and expose internal metrics for the UDP listener, including packets received per second, parse failures, and batch insert latency.
 
 Range Tool
 ~~~~~~~~~~
@@ -403,6 +306,108 @@ The range tool is the ability to do calculations based on the data from entities
 
 
 
+Architecture
+------------
+
+.. req:: Web-first responsive UI
+   :id: REQ_WEB_FIRST_UX
+   :parent: REQ_ANALYSIS_PLOTS
+
+   Build a responsive web application with server-rendered pages and progressive enhancement.
+
+   Web-application because plotting libraries are just better
+
+.. req:: No-JavaScript-first navigation
+   :id: REQ_NAVIGABLE_WITHOUT_JS
+   :parent: REQ_WEB_FIRST_UX
+
+   Make the UI fully navigable without JavaScript whenever possible, while enhancing interactions with HTMX.
+
+.. req:: Separation of concerns
+   :id: REQ_SEPARATION_OF_CONCERNS
+   :parent: REQ_PARENT
+
+   Keep message ingestion, storage, and UI rendering distinct so the system can evolve independently.
+
+.. req:: Minimal deployment friction
+   :id: REQ_MINIMAL_DEPLOYMENT_FRICTION
+   :parent: REQ_PARENT
+
+   Package the project as a standard Python package and keep development tooling simple.
+
+
+
+
+Data Ingestion and Persistence
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. req:: Real-time persistence of DIS messages
+   :id: REQ_PERSISTENCE
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Ingest DIS messages in real time and persist them to a local SQL database for efficient filtering and replay.
+
+.. req:: Flexible SQL-first query model
+   :id: REQ_SQL_QUERY_MODEL
+   :parent: REQ_PARENT
+
+   Support raw SQL filtering and higher-level query helpers for time range, PDU type, entity, and parsed field searches.
+
+.. req:: Schema flexibility for PDU types
+   :id: REQ_SCHEMA_FLEXIBILITY
+   :parent: REQ_PARENT
+
+   Avoid hard-coding every PDU type schema and support extensible PDU type handling.
+
+.. req:: System health and error logging
+   :id: REQ_SYSTEM_HEALTH_LOGGING
+   :parent: REQ_PARENT
+
+   Maintain logs for system errors, ingestion dropped packets, and application warnings to aid in troubleshooting and system monitoring.
+
+.. req:: Configurable data retention limits
+   :id: REQ_DATA_RETENTION
+   :parent: REQ_PERSISTENCE
+
+   Provide a mechanism to prune old DIS messages automatically based on a configurable time horizon or database file size limit to prevent disk exhaustion.
+
+.. req:: Pre-ingestion network filtering
+   :id: REQ_NETWORK_FILTERING
+   :parent: REQ_PERSISTENCE
+
+   Allow configuration of hardware and network-level filters, such as Exercise ID or Site ID, to drop irrelevant PDUs before processing or database insertion.
+
+
+
+Other
+-----
+
+.. req:: Replay DIS messages from database
+   :id: REQ_DIS_MESSAGE_REPLAY
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Support replay of persisted DIS messages in the application
+
+.. req:: Re-emit DIS messages over the network
+   :id: REQ_DIS_REEMIT
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Support re-emitting persisted DIS messages over the network to a configurable endpoint for integration with external tools.
+
+.. req:: Export filtered datasets
+   :id: REQ_DATA_EXPORT
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Support exporting the currently filtered view of DIS messages to standard data formats (e.g., CSV, JSON) for external analysis and reporting.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -410,6 +415,45 @@ Implementation Choices
 ----------------------
 
 These implementation choices support the high-level requirements without being the only way to satisfy them.
+
+.. spec:: Paginated message loading
+   :id: SPEC_PAGINATION_LIMITS
+   :parent: SPEC_MESSAGES_PAGE, SPEC_HTMX_INTERACTIONS
+
+   Implement strict pagination or HTMX-driven infinite scrolling limits on the messages page to prevent browser memory exhaustion when viewing millions of persisted rows.
+
+.. spec:: Real-time ingestion metrics
+   :id: SPEC_INGESTION_METRICS
+   :parent: REQ_SYSTEM_HEALTH_LOGGING, SPEC_CONNECTION_INFORMATION
+
+   Track and expose internal metrics for the UDP listener, including packets received per second, parse failures, and batch insert latency.
+
+
+.. spec:: Optimized database indexing
+   :id: SPEC_DB_INDEXING
+   :parent: SPEC_SQLITE_WAL, REQ_SQL_QUERY_MODEL
+
+   Maintain explicit database indexing on high-frequency query columns including Timestamp, PDU Type, Entity ID, and Exercise ID to ensure UI responsiveness.
+
+.. spec:: Resilient malformed packet handling
+   :id: SPEC_MALFORMED_PACKET_HANDLING
+   :parent: SPEC_OPEN_DIS_PY
+
+   Catch and log parser exceptions for malformed UDP packets without interrupting the main asyncio ingestion task or dropping healthy packets in the current batch.
+
+.. spec:: Multicast and broadcast support
+   :id: SPEC_MULTICAST_SUPPORT
+   :parent: SPEC_CONNECTION_INFORMATION
+
+   Ensure the UDP listener can be configured to join specific multicast groups or listen for general broadcast traffic on designated network interfaces.
+
+.. spec:: Secure default binding
+   :id: SPEC_LOCAL_BINDING
+   :parent: REQ_MINIMAL_DEPLOYMENT_FRICTION
+
+   Default the Django web server binding to localhost (127.0.0.1) to ensure the application remains a local desktop tool unless explicitly configured otherwise.
+
+
 
 .. spec:: HTMX-driven lightweight interactions
    :id: SPEC_HTMX_INTERACTIONS
