@@ -186,121 +186,121 @@ The range tool is the ability to do calculations based on the data from entities
 
 .. req:: Slant Range Calculation
    :id: REQ_RANGE_SLANT
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate and display the 3D Euclidean distance (slant range) between two entities or a defined coordinate pair.
 
 .. req:: Relative Bearing Calculation
    :id: REQ_RANGE_BEARING
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the horizontal angle from an entity's current orientation (heading) to a target entity or coordinate.
 
 .. req:: Closure Rate Calculation
    :id: REQ_RANGE_CLOSURE
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the rate of change of slant range over time between two entities, accounting for their respective velocity vectors.
 
 .. req:: Closest Point of Approach (CPA)
    :id: REQ_RANGE_CPA
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_VECTOR
 
    Predict and display the minimum slant range between two entities based on their current velocity vectors and acceleration.
 
 .. req:: Aspect Angle Calculation
    :id: REQ_RANGE_ASPECT
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the angle between a target's nose-to-tail vector and the line-of-sight vector from an observing entity.
 
 .. req:: Line of Sight (LOS) Obstruction
    :id: REQ_RANGE_LOS
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_VECTOR
 
    Determine if a direct line between two entities is obstructed by terrain elevation data.
 
 .. req:: Time to Intercept (TTI)
    :id: REQ_RANGE_TTI
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the time remaining until the slant range between an interceptor and a target reaches zero, assuming current velocity vectors.
 
 .. req:: Elevation Angle Calculation
    :id: REQ_RANGE_ELEVATION
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the vertical angle between the local horizontal plane of an observer and the target entity.
 
 .. req:: Ground Speed Calculation
    :id: REQ_RANGE_GROUND_SPEED
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate and display the ground velocity of an entity based on its X, Y velocity vector components.
 
 .. req:: Vertical Velocity (Rate of Climb/Descent)
    :id: REQ_RANGE_VVI
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate and display the vertical velocity of an entity based on the Z-axis rate of change.
 
 .. req:: Turn Rate Analysis
    :id: REQ_RANGE_TURN_RATE
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate and display the instantaneous turn rate based on the change in heading over time.
 
 .. req:: G-Force Estimation
    :id: REQ_RANGE_G_LOAD
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Estimate the instantaneous G-load on an entity
 
 .. req:: Horizon Range Calculation
    :id: REQ_RANGE_HORIZON
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_VECTOR
 
    Calculate the theoretical radio and optical horizon distance for an entity given its altitude above mean sea level (AMSL).
 
 .. req:: Boresight Alignment Analysis
    :id: REQ_RANGE_BORESIGHT
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_VECTOR
 
    Calculate the angular offset between an entity's nose heading and the line-of-sight vector to a target (tracking error).
 
 .. req:: Weapon Fly-Out Range
    :id: REQ_RANGE_WEAPON_FLIGHT
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the cumulative distance traveled by a projectile or missile from the point of start (or some other arbitrary time) to current position.
 
 .. req:: Sensor Field-of-Regard (FOR) intersection
    :id: REQ_RANGE_FOR_INTERSECT
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_VOLUME
 
    Determine if a target entity is contained within the current spatial volume defined by a source entity's sensor cone.
 
 .. req:: Time Delta Measurement
    :id: REQ_RANGE_TIME_DELTA
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Measure the elapsed simulation time between two discrete events (e.g., time from "Launch" to "Impact").
 
 .. req:: Signal Path Loss Estimation
    :id: REQ_RANGE_PATH_LOSS
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Estimate the free-space path loss (in dB) between a radar emitter and a target based on slant range and frequency to evaluate detection probability thresholds.
 
 .. req:: Relative Altitude Delta (Angled Slant)
    :id: REQ_RANGE_ALT_DELTA
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the direct vertical altitude difference between two entities, specifically isolating the height-of-eye/height-of-target differential.
 
 .. req:: Energy State (Specific Energy) Calculation
    :id: REQ_RANGE_ENERGY_STATE
-   :parent: REQ_RANGE_TOOL
+   :parent: REQ_RANGE_TOOL, REQ_RANGE_VISUAL_SCALAR
 
    Calculate the specific energy (Energy Height) of an entity (potential + kinetic energy) to evaluate maneuverability and "energy-maneuverability" (EM) dogfight capability.
 
@@ -311,26 +311,21 @@ Visualisation
    :id: REQ_RANGE_VISUAL_SCALAR
    :parent: REQ_3D_OPERATIONAL_MAP
 
-   Display numerical data (e.g., Slant Range, Closure Rate, TTI) as HUD-style persistent labels
-   anchored to entities or measurement lines. Labels must support dynamic updates at the
-   render-cycle rate to ensure fluid visual performance.
+   Display numerical data (e.g., Slant Range, Closure Rate, TTI) as HUD-style persistent labels anchored to entities or measurement lines. Labels must support dynamic updates at the render-cycle rate to ensure fluid visual performance.
 
 .. req:: Vector and Path Visualization
    :id: REQ_RANGE_VISUAL_VECTOR
    :parent: REQ_3D_OPERATIONAL_MAP
 
-   Render spatial relationships as lines or projections (e.g., Bearing, Line-of-Sight,
-   Intercept Paths). Visuals must support state-based styling, including color-coding
-   (e.g., red for obstructed/threat, green for clear/nominal) and dashed-line
-   representation for projected/predictive paths.
+   Render spatial relationships as lines or projections (e.g., Bearing, Line-of-Sight, Intercept Paths). Visuals must upport state-based styling, including color-coding (e.g., red for obstructed/threat, green for clear/nominal) and dashed-line representation for projected/predictive paths.
 
 .. req:: Spatial Volume Rendering
    :id: REQ_RANGE_VISUAL_VOLUME
    :parent: REQ_3D_OPERATIONAL_MAP
 
    Render 3D geometric volumes (e.g., Sensor Cones, WEZ) as semi-transparent primitives.
-   These must support dynamic deformation based on the underlying entity's orientation
-   and state attributes (e.g., radar pitch, weapon max-range).
+
+   These must support dynamic orientation/translation/deformation  based on the underlying entity's orientation and state attributes (e.g., radar pitch, weapon max-range).
 
 
 Architecture
