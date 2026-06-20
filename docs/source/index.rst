@@ -123,6 +123,12 @@ High-Level Requirements
 
    Support replay of persisted DIS messages in the application
 
+.. req:: Allow DIS inspection in the 3D operational map
+   :id: REQ_DIS_INSPECTION_3D_MAP
+   :parent: REQ_LIVE_3D_OPERATIONAL_MAP, REQ_DIS_INVESTIGATION_TOOLS
+
+   Allow users to click on entities and events in the 3D map to view detailed DIS message information that contributed to that scene element.
+
 .. req:: Re-emit DIS messages over the network
    :id: REQ_DIS_REEMIT
    :parent: REQ_DIS_INVESTIGATION_TOOLS
@@ -255,6 +261,147 @@ High-Level Requirements
 
    Track and expose internal metrics for the UDP listener, including packets received per second, parse failures, and batch insert latency.
 
+Range Tool
+~~~~~~~~~~
+
+The range tool is the ability to do calculations based on the data from entities. It shows them on the 3D map IN :need:`REQ_3D_OPERATIONAL_MAP`, but also let's them be graphs in the :need:`REQ_ANALYSIS_PLOTS`. The range tool is a core part of the engagement behavior of DIShboard and allows users to quickly understand the spatial (and other, but it's mostly spatial) relationships between entities in a scenario.
+
+.. req:: Range tool for analysis
+   :id: REQ_RANGE_TOOL
+   :parent: REQ_ANALYSIS_PLOTS, REQ_3D_OPERATIONAL_MAP
+
+   Provide a range tool that allows users to select two or more entities and visualize the range, bearing, and other  relationships between them in both the 3D map and analysis plots.
+
+.. req:: Analysis tool unit configuration
+   :id: REQ_ANALYSIS_UNITS
+   :parent: REQ_RANGE_TOOL
+
+   Support configurable display units for all analytical outputs, including Metric (m/km, km/h) and Imperial/Aviation (ft/nm, kts).
+
+.. req:: Slant Range Calculation
+   :id: REQ_RANGE_SLANT
+   :parent: REQ_RANGE_TOOL
+
+   Calculate and display the 3D Euclidean distance (slant range) between two entities or a defined coordinate pair.
+
+.. req:: Relative Bearing Calculation
+   :id: REQ_RANGE_BEARING
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the horizontal angle from an entity's current orientation (heading) to a target entity or coordinate.
+
+.. req:: Closure Rate Calculation
+   :id: REQ_RANGE_CLOSURE
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the rate of change of slant range over time between two entities, accounting for their respective velocity vectors.
+
+.. req:: Closest Point of Approach (CPA)
+   :id: REQ_RANGE_CPA
+   :parent: REQ_RANGE_TOOL
+
+   Predict and display the minimum slant range between two entities based on their current velocity vectors and acceleration.
+
+.. req:: Aspect Angle Calculation
+   :id: REQ_RANGE_ASPECT
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the angle between a target's nose-to-tail vector and the line-of-sight vector from an observing entity.
+
+.. req:: Line of Sight (LOS) Obstruction
+   :id: REQ_RANGE_LOS
+   :parent: REQ_RANGE_TOOL
+
+   Determine if a direct line between two entities is obstructed by terrain elevation data.
+
+.. req:: Time to Intercept (TTI)
+   :id: REQ_RANGE_TTI
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the time remaining until the slant range between an interceptor and a target reaches zero, assuming current velocity vectors.
+
+.. req:: Elevation Angle Calculation
+   :id: REQ_RANGE_ELEVATION
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the vertical angle between the local horizontal plane of an observer and the target entity.
+
+.. req:: Ground Speed Calculation
+   :id: REQ_RANGE_GROUND_SPEED
+   :parent: REQ_RANGE_TOOL
+
+   Calculate and display the ground velocity of an entity based on its X, Y velocity vector components.
+
+.. req:: Vertical Velocity (Rate of Climb/Descent)
+   :id: REQ_RANGE_VVI
+   :parent: REQ_RANGE_TOOL
+
+   Calculate and display the vertical velocity of an entity based on the Z-axis rate of change.
+
+.. req:: Turn Rate Analysis
+   :id: REQ_RANGE_TURN_RATE
+   :parent: REQ_RANGE_TOOL
+
+   Calculate and display the instantaneous turn rate based on the change in heading over time.
+
+.. req:: G-Force Estimation
+   :id: REQ_RANGE_G_LOAD
+   :parent: REQ_RANGE_TOOL
+
+   Estimate the instantaneous G-load on an entity
+
+.. req:: Horizon Range Calculation
+   :id: REQ_RANGE_HORIZON
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the theoretical radio and optical horizon distance for an entity given its altitude above mean sea level (AMSL).
+
+.. req:: Boresight Alignment Analysis
+   :id: REQ_RANGE_BORESIGHT
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the angular offset between an entity's nose heading and the line-of-sight vector to a target (tracking error).
+
+.. req:: Weapon Fly-Out Range
+   :id: REQ_RANGE_WEAPON_FLIGHT
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the cumulative distance traveled by a projectile or missile from the point of start (or some other arbitrary time) to current position.
+
+.. req:: Sensor Field-of-Regard (FOR) intersection
+   :id: REQ_RANGE_FOR_INTERSECT
+   :parent: REQ_RANGE_TOOL
+
+   Determine if a target entity is contained within the current spatial volume defined by a source entity's sensor cone.
+
+.. req:: Time Delta Measurement
+   :id: REQ_RANGE_TIME_DELTA
+   :parent: REQ_RANGE_TOOL
+
+   Measure the elapsed simulation time between two discrete events (e.g., time from "Launch" to "Impact").
+
+.. req:: Signal Path Loss Estimation
+   :id: REQ_RANGE_PATH_LOSS
+   :parent: REQ_RANGE_TOOL
+
+   Estimate the free-space path loss (in dB) between a radar emitter and a target based on slant range and frequency to evaluate detection probability thresholds.
+
+.. req:: Relative Altitude Delta (Angled Slant)
+   :id: REQ_RANGE_ALT_DELTA
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the direct vertical altitude difference between two entities, specifically isolating the height-of-eye/height-of-target differential.
+
+.. req:: Energy State (Specific Energy) Calculation
+   :id: REQ_RANGE_ENERGY_STATE
+   :parent: REQ_RANGE_TOOL
+
+   Calculate the specific energy (Energy Height) of an entity (potential + kinetic energy) to evaluate maneuverability and "energy-maneuverability" (EM) dogfight capability.
+
+
+
+
+
 
 Implementation Choices
 ----------------------
@@ -332,9 +479,22 @@ These implementation choices support the high-level requirements without being t
 
    Use XSLT transformations to generate Django model code and summary field templates from the official DIS PDU XML specification to support maintainability and traceability.
 
+Range Tool
+~~~~~~~~~~
+
+The range tool should be accessible from both the 3D map and the analysis plots, allowing users to select entities and visualize calculated relationships between them.
+
+.. spec:: Range Tool UI
+   :id: SPEC_RANGE_TOOL_UI
+   :parent: REQ_RANGE_TOOL
+
+   The range tool UI should be a separate page (embeddable in the 3D map, and also the PDU viewer) that allows users to select two or more entities and choose from a list of available calculations (slant range, bearing, closure rate, etc.) to visualize the results.
+
+   The tool should be 3 sections - Top is entity selection, bottom-left is calculation type, and right is a list of active calculations with results. When a calculation is selected, the relevant entities and relationships should be highlighted in the 3D map and/or analysis plots.
+
 
 Page Workflow Specifications
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. spec:: Connection information page
    :id: SPEC_CONNECTION_INFORMATION
