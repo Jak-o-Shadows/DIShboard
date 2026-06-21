@@ -1,3 +1,5 @@
+import os
+
 import lxml.etree as ET
 
 
@@ -18,16 +20,16 @@ if __name__ == "__main__":
     run_xlst_transform(
         filepath_dis_spec,
         'pdu_to_django.xslt',
-        'pdu_models.py'
+        os.path.join("..", "board", "pdu_models.py")
     )
     print(f"Generated pdu_models.py from {filepath_dis_spec} using XSLT.")
 
-    # @PDU Summary view content generation, IMPL_DIS_PDU_SUMMARY_GENERATION, code_impl, [SPEC_PDU_CODE_GENERATION]
+    # @PDU Detail view content generation, IMPL_DIS_PDU_DETAIL_GENERATION, code_impl, [SPEC_PDU_CODE_GENERATION]
     run_xlst_transform(
         filepath_dis_spec, 
-        "pdu_to_summary.xslt",
-        "partial_pdu_summary.html"
+        "pdu_to_detail.xslt",
+        os.path.join("..", "board", "templates", "pdus", "partial_pdu_detail.html")
     )
-    print(f"Generated partial_pdu_summary.html from {filepath_dis_spec} using XSLT.")
+    print(f"Generated partial_pdu_detail.html from {filepath_dis_spec} using XSLT.")
 
 

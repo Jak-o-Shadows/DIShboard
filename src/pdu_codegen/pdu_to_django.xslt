@@ -14,6 +14,9 @@ from django.db import models
 </xsl:text>
       <xsl:apply-templates select="attribute" />
         <xsl:text>
+    @property
+    def pdu_name(self):
+        return self.__class__.__name__
 
 </xsl:text>
       </xsl:for-each>
