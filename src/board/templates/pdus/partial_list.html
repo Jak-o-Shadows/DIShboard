@@ -11,22 +11,22 @@
         </tr>
     </thead>
     <tbody>
-        {% for pdu in pdus %}
-        <tr class="pdu-row" hx-get="{% url 'pdu_detail' pdu.pk %}" hx-trigger="click" hx-target="#detail-panel" hx-swap="innerHTML">
-            <td class="timestamp">{{ pdu.timestamp|date:"H:i:s.u" }}</td>
-            <td>{{ pdu.pdu_type_name }}</td>
+        {% for hub_entry in pdus %}
+        <tr class="pdu-row" hx-get="{% url 'pdu_detail' hub_entry.pk %}" hx-trigger="click" hx-target="#detail-panel" hx-swap="innerHTML">
+            <td class="timestamp">{{ hub_entry.timestamp|date:"H:i:s.u" }}</td>
+            <td>{{ hub_entry.pdu_type }}</td>
             <td>
-                {% if pdu.pdu_name == 'EntityStatePDU' %}
-                    {{ pdu.site_id }}:{{ pdu.application_id }}:{{ pdu.entity_id }} @ {{ pdu.pos_x|floatformat:1 }}, {{ pdu.pos_y|floatformat:1 }}, {{ pdu.pos_z|floatformat:1 }}
-                {% elif pdu.pdu_name == 'FirePDU' %}
-                    Firing {{ pdu.firing_site_id }}:{{ pdu.firing_application_id }}:{{ pdu.firing_entity_id }}
-                {% elif pdu.pdu_name == 'DetonationPDU' %}
-                    Detonation at {{ pdu.location_x|default:"?"|floatformat:1 }}, {{ pdu.location_y|default:"?"|floatformat:1 }}, {{ pdu.location_z|default:"?"|floatformat:1 }}
-                {% elif pdu.pdu_name == 'CollisionPDU' %}
-                    Collision between {{ pdu.issuing_site_id }}:{{ pdu.issuing_application_id }}:{{ pdu.issuing_entity_id }} and {{ pdu.colliding_site_id }}:{{ pdu.colliding_application_id }}:{{ pdu.colliding_entity_id }}
+                {% with pdu=hub_entry.content_object %}
+                    {% if hub_entry.pdu_type == 1 %}
+                        {{ pdu.entityID_siteID }}:{{ pdu.entityID_applicationID }}:{{ pdu.entityID_entityID }} @ {{ pdu.entityLocation_x|floatformat:1 }}, {{ pdu.entityLocation_y|floatformat:1 }}, {{ pdu.entityLocation_z|floatformat:1 }}
+                    {% elif hub_entry.pdu_type == 2 %}
+                        Fire: {{ pdu.munitionExpendibleID_siteID }}:{{ pdu.munitionExpendibleID_applicationID }}:{{ pdu.munitionExpendibleID_entityID }}
+                    {% elif hub_entry.pdu_type == 3 %}
+                        Detonation at {{ pdu.locationInWorldCoordinates_x|floatformat:1 }}, {{ pdu.locationInWorldCoordinates_y|floatformat:1 }}, {{ pdu.locationInWorldCoordinates_z|floatformat:1 }}
                 {% else %}
-                    {{ pdu.raw_payload|length }} bytes
+                        PDU Type {{ hub_entry.pdu_type }}
                 {% endif %}
+                {% endwith %}
             </td>
         </tr>
         {% empty %}
@@ -34,3 +34,4 @@
         {% endfor %}
     </tbody>
 </table>
+
