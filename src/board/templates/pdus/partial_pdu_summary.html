@@ -1,220 +1,112 @@
 <!--This template is for the "summary column" in the PDU list view-->
 {% if pdu.pdu_name == 'EntityStatePdu' %}
-    <dl>
-
-    </dl>
+    E: {{ pdu.entityID_entityID }} (F: {{ pdu.forceId }})
 {% elif pdu.pdu_name == 'FastEntityStatePdu' %}
-    <dl>
-
-    </dl>
+    E: {{ pdu.entity }} (F: {{ pdu.forceId }})
 {% elif pdu.pdu_name == 'CollisionPdu' %}
-    <dl>
-
-    </dl>
+    Issuer: {{ pdu.issuingEntityID_entityID }} -> Coll: {{ pdu.collidingEntityID_entityID }}
 {% elif pdu.pdu_name == 'CollisionElasticPdu' %}
-    <dl>
-
-    </dl>
+    Issuer: {{ pdu.issuingEntityID_entityID }} -> Coll: {{ pdu.collidingEntityID_entityID }}
 {% elif pdu.pdu_name == 'EntityStateUpdatePdu' %}
-    <dl>
-
-    </dl>
+    E: {{ pdu.entityID_entityID }}
 {% elif pdu.pdu_name == 'FirePdu' %}
-    <dl>
-
-    </dl>
+    Munition: {{ pdu.munitionExpendibleID_entityID }} (Range: {{ pdu.range }})
 {% elif pdu.pdu_name == 'DetonationPdu' %}
-    <dl>
-
-    </dl>
+    Exploder: {{ pdu.explodingEntityID_entityID }} (Result: {{ pdu.detonationResult }})
 {% elif pdu.pdu_name == 'DirectedEnergyFirePdu' %}
-    <dl>
-
-    </dl>
+    Records: {{ pdu.numberOfDERecords }} (Peak: {{ pdu.peakIrradiance }})
 {% elif pdu.pdu_name == 'EntityDamageStatusPdu' %}
-    <dl>
-
-    </dl>
+    Damaged: {{ pdu.damagedEntityID_entityID }} (Recs: {{ pdu.numberOfDamageDescription }})
 {% elif pdu.pdu_name == 'ServiceRequestPdu' %}
-    <dl>
-
-    </dl>
+    Req: {{ pdu.requestingEntityID_entityID }} (Type: {{ pdu.serviceTypeRequested }})
 {% elif pdu.pdu_name == 'ResupplyOfferPdu' %}
-    <dl>
-
-    </dl>
+    Recv: {{ pdu.receivingEntityID_entityID }} (Supp: {{ pdu.supplyingEntityID_entityID }})
 {% elif pdu.pdu_name == 'ResupplyReceivedPdu' %}
-    <dl>
-
-    </dl>
+    Recv: {{ pdu.receivingEntityID_entityID }} (Supp: {{ pdu.supplyingEntityID_entityID }})
 {% elif pdu.pdu_name == 'RepairCompletePdu' %}
-    <dl>
-
-    </dl>
+    Recv: {{ pdu.receivingEntityID_entityID }} (Rep: {{ pdu.repairingEntityID_entityID }})
 {% elif pdu.pdu_name == 'RepairResponsePdu' %}
-    <dl>
-
-    </dl>
+    Recv: {{ pdu.receivingEntityID_entityID }} (Result: {{ pdu.repairResult }})
 {% elif pdu.pdu_name == 'CreateEntityPdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'RemoveEntityPdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'StartResumePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'StopFreezePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Reason: {{ pdu.reason }})
 {% elif pdu.pdu_name == 'AcknowledgePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Flag: {{ pdu.acknowledgeFlag }})
 {% elif pdu.pdu_name == 'ActionRequestPdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (ActID: {{ pdu.actionID }})
 {% elif pdu.pdu_name == 'ActionResponsePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Status: {{ pdu.requestStatus }})
 {% elif pdu.pdu_name == 'DataQueryPdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Interval: {{ pdu.timeInterval }})
 {% elif pdu.pdu_name == 'SetDataPdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'DataPdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'EventReportPdu' %}
-    <dl>
-
-    </dl>
+    Type: {{ pdu.eventType }}
 {% elif pdu.pdu_name == 'CommentPdu' %}
-    <dl>
-
-    </dl>
+    Fixed: {{ pdu.numberOfFixedDatumRecords }} | Var: {{ pdu.numberOfVariableDatumRecords }}
 {% elif pdu.pdu_name == 'ElectronicEmissionsPdu' %}
-    <dl>
-
-    </dl>
+    Emitter: {{ pdu.emittingEntityID_entityID }} (Systems: {{ pdu.numberOfSystems }})
 {% elif pdu.pdu_name == 'DesignatorPdu' %}
-    <dl>
-
-    </dl>
+    Desig: {{ pdu.designatingEntityID_entityID }} -> Target: {{ pdu.designatedEntityID_entityID }}
 {% elif pdu.pdu_name == 'UaPdu' %}
-    <dl>
-
-    </dl>
+    Emitter: {{ pdu.emittingEntityID_entityID }} (Shafts: {{ pdu.numberOfShafts }})
 {% elif pdu.pdu_name == 'SeesPdu' %}
-    <dl>
-
-    </dl>
+    Origin: {{ pdu.orginatingEntityID_entityID }}
 {% elif pdu.pdu_name == 'IntercomSignalPdu' %}
-    <dl>
-
-    </dl>
+    Entity: {{ pdu.entityID_entityID }} (Device: {{ pdu.communicationsDeviceID }})
 {% elif pdu.pdu_name == 'TransmitterPdu' %}
-    <dl>
-
-    </dl>
+    Radio: {{ pdu.radioNumber }} (Power: {{ pdu.power }})
 {% elif pdu.pdu_name == 'SignalPdu' %}
-    <dl>
-
-    </dl>
+    Samples: {{ pdu.samples|length }}
 {% elif pdu.pdu_name == 'ReceiverPdu' %}
-    <dl>
-
-    </dl>
+    State: {{ pdu.receiverState }} (Power: {{ pdu.receivedPower }})
 {% elif pdu.pdu_name == 'IntercomControlPdu' %}
-    <dl>
-
-    </dl>
+    Source: {{ pdu.sourceEntityID_entityID }} (Cmd: {{ pdu.command }})
 {% elif pdu.pdu_name == 'IsPartOfPdu' %}
-    <dl>
-
-    </dl>
+    Orig: {{ pdu.orginatingEntityID_entityID }} -> Recv: {{ pdu.receivingEntityID_entityID }}
 {% elif pdu.pdu_name == 'MinefieldStatePdu' %}
-    <dl>
-
-    </dl>
+    Minefield: {{ pdu.minefieldID_minefieldNumber }} (Points: {{ pdu.numberOfPerimeterPoints }})
 {% elif pdu.pdu_name == 'MinefieldResponseNackPdu' %}
-    <dl>
-
-    </dl>
+    Minefield: {{ pdu.minefieldID_entityID }} (Missing: {{ pdu.numberOfMissingPdus }})
 {% elif pdu.pdu_name == 'PointObjectStatePdu' %}
-    <dl>
-
-    </dl>
+    Obj: {{ pdu.objectID_entityID }} (Ref: {{ pdu.referencedObjectID_entityID }})
 {% elif pdu.pdu_name == 'LinearObjectStatePdu' %}
-    <dl>
-
-    </dl>
+    Obj: {{ pdu.objectID_entityID }} (Segments: {{ pdu.numberOfSegments }})
 {% elif pdu.pdu_name == 'ArealObjectStatePdu' %}
-    <dl>
-
-    </dl>
+    Obj: {{ pdu.objectID_entityID }} (Points: {{ pdu.numberOfPoints }})
 {% elif pdu.pdu_name == 'CreateEntityReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'RemoveEntityReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'StartResumeReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'StopFreezeReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Reason: {{ pdu.reason }})
 {% elif pdu.pdu_name == 'AcknowledgeReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Flag: {{ pdu.acknowledgeFlag }})
 {% elif pdu.pdu_name == 'ActionRequestReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (ActID: {{ pdu.actionID }})
 {% elif pdu.pdu_name == 'ActionResponseReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Status: {{ pdu.responseStatus }})
 {% elif pdu.pdu_name == 'DataQueryReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Interval: {{ pdu.timeInterval }})
 {% elif pdu.pdu_name == 'SetDataReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'DataReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }}
 {% elif pdu.pdu_name == 'EventReportReliablePdu' %}
-    <dl>
-
-    </dl>
+    Type: {{ pdu.eventType }}
 {% elif pdu.pdu_name == 'CommentReliablePdu' %}
-    <dl>
-
-    </dl>
+    Fixed: {{ pdu.numberOfFixedDatumRecords }} | Var: {{ pdu.numberOfVariableDatumRecords }}
 {% elif pdu.pdu_name == 'RecordQueryReliablePdu' %}
-    <dl>
-
-    </dl>
+    ReqID: {{ pdu.requestID }} (Records: {{ pdu.numberOfRecords }})
     {% else %}
 {{ pdu.raw_payload|length }} bytes
     {% endif %}

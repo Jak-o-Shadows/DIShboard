@@ -84,7 +84,7 @@ def start_ingestion(request):
 def pdu_list(request):
     """HTMX endpoint to return the latest 20 PDUs from the Hub."""
     pdus = PduHub.objects.all().order_by('-timestamp')[:20]
-    return render_to_string('partial_pdu_list.html', {
+    return render_to_string("pdus/partial_list.html", {
         'pdus': pdus,
         'pdu_count': PduHub.objects.count(),
     })

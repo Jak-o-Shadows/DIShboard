@@ -1,7 +1,3 @@
-<div class="stream-summary">
-    <div><strong>{{ pdus|length }}</strong> latest</div>
-    <div><strong>{{ pdu_count }}</strong> total saved</div>
-</div>
 <table>
     <thead>
         <tr>
@@ -12,20 +8,12 @@
     </thead>
     <tbody>
         {% for hub_entry in pdus %}
-        <tr class="pdu-row" hx-get="{% url 'pdu_detail' hub_entry.pk %}" hx-trigger="click" hx-target="#detail-panel" hx-swap="innerHTML">
+        <tr class="pdu-row" hx-get="{% url 'board:pdu_detail' hub_entry.pk %}" hx-trigger="click" hx-target="#detail-panel" hx-swap="innerHTML">
             <td class="timestamp">{{ hub_entry.timestamp|date:"H:i:s.u" }}</td>
             <td>{{ hub_entry.pdu_type }}</td>
             <td>
                 {% with pdu=hub_entry.content_object %}
-                    {% if hub_entry.pdu_type == 1 %}
-                        {{ pdu.entityID_siteID }}:{{ pdu.entityID_applicationID }}:{{ pdu.entityID_entityID }} @ {{ pdu.entityLocation_x|floatformat:1 }}, {{ pdu.entityLocation_y|floatformat:1 }}, {{ pdu.entityLocation_z|floatformat:1 }}
-                    {% elif hub_entry.pdu_type == 2 %}
-                        Fire: {{ pdu.munitionExpendibleID_siteID }}:{{ pdu.munitionExpendibleID_applicationID }}:{{ pdu.munitionExpendibleID_entityID }}
-                    {% elif hub_entry.pdu_type == 3 %}
-                        Detonation at {{ pdu.locationInWorldCoordinates_x|floatformat:1 }}, {{ pdu.locationInWorldCoordinates_y|floatformat:1 }}, {{ pdu.locationInWorldCoordinates_z|floatformat:1 }}
-                {% else %}
-                        PDU Type {{ hub_entry.pdu_type }}
-                {% endif %}
+                    {% include "pdus/partial_pdu_summary.html" %}
                 {% endwith %}
             </td>
         </tr>
@@ -34,4 +22,5 @@
         {% endfor %}
     </tbody>
 </table>
+
 
