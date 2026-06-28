@@ -1,8 +1,8 @@
 <!--This template is for the "summary column" in the PDU list view-->
 {% if pdu.pdu_name == 'EntityStatePdu' %}
-    E: {{ pdu.entityID_entityID }} (F: {{ pdu.forceId }})
+    E: {{ pdu.entityID_entityID }} (F: {{ pdu.forceId }}) | Loc: {{ pdu.entityLocation_x|floatformat:0 }}, {{ pdu.entityLocation_y|floatformat:0 }}, {{ pdu.entityLocation_z|floatformat:0 }}
 {% elif pdu.pdu_name == 'FastEntityStatePdu' %}
-    E: {{ pdu.entity }} (F: {{ pdu.forceId }})
+    E: {{ pdu.entity }} (F: {{ pdu.forceId }}) | Loc: {{ pdu.xLocation|floatformat:0 }}, {{ pdu.yLocation|floatformat:0 }}, {{ pdu.zLocation|floatformat:0 }}
 {% elif pdu.pdu_name == 'CollisionPdu' %}
     Issuer: {{ pdu.issuingEntityID_entityID }} -> Coll: {{ pdu.collidingEntityID_entityID }}
 {% elif pdu.pdu_name == 'CollisionElasticPdu' %}
