@@ -1,0 +1,220 @@
+<!--This template is for the "summary column" in the PDU list view-->
+{% if pdu.pdu_name == 'EntityStatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'FastEntityStatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'CollisionPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'CollisionElasticPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'EntityStateUpdatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'FirePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DetonationPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DirectedEnergyFirePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'EntityDamageStatusPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ServiceRequestPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ResupplyOfferPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ResupplyReceivedPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'RepairCompletePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'RepairResponsePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'CreateEntityPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'RemoveEntityPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'StartResumePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'StopFreezePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'AcknowledgePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ActionRequestPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ActionResponsePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DataQueryPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'SetDataPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DataPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'EventReportPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'CommentPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ElectronicEmissionsPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DesignatorPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'UaPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'SeesPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'IntercomSignalPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'TransmitterPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'SignalPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ReceiverPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'IntercomControlPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'IsPartOfPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'MinefieldStatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'MinefieldResponseNackPdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'PointObjectStatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'LinearObjectStatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ArealObjectStatePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'CreateEntityReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'RemoveEntityReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'StartResumeReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'StopFreezeReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'AcknowledgeReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ActionRequestReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'ActionResponseReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DataQueryReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'SetDataReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'DataReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'EventReportReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'CommentReliablePdu' %}
+    <dl>
+
+    </dl>
+{% elif pdu.pdu_name == 'RecordQueryReliablePdu' %}
+    <dl>
+
+    </dl>
+    {% else %}
+{{ pdu.raw_payload|length }} bytes
+    {% endif %}
