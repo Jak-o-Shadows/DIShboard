@@ -70,8 +70,9 @@ src_trace_config_from_toml = "ubproject.toml"
 build_type = sys.argv[2]  # This is not a great way, but is easy - see https://stackoverflow.com/a/65849575
 match build_type:
     case "latex":
-        needs_flow_engine = "plantuml"  # Doing latex export, so plantUML is required
-        extensions.append("sphinxcontrib.plantuml")
+        needs_flow_engine = "graphviz" # Can't get a workign install of plantUML with other deps
+        #needs_flow_engine = "plantuml"  # Doing latex export, so plantUML is required
+        #extensions.append("sphinxcontrib.plantuml")
     case "html":
         needs_flow_engine = "graphviz"  # Not doing latex export, so graphviz is better
     case _:

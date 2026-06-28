@@ -19,7 +19,6 @@ docs = [
     "sphinx-needs",
     "sphinx-codelinks",
     "sphinx-autoapi",
-    "sphinx-plantuml",
 ]
 
 [tool.setuptools]
