@@ -66,4 +66,16 @@ html_static_path = ['_static']
 needs_from_toml = "ubproject.toml"
 src_trace_config_from_toml = "ubproject.toml"
 
-needs_flow_engine = "graphviz"  # Not doing latex export, so graphviz is better
+# Must switch between graphviz & plantUML, depending on whether we are doing latex export or not
+build_type = sys.argv[2]  # This is not a great way, but is easy - see https://stackoverflow.com/a/65849575
+match build_type:
+    case "latex":
+        needs_flow_engine = "plantuml"  # Doing latex export, so plantUML is required
+        extensions.append("sphinxcontrib.plantuml")
+    case "html":
+        needs_flow_engine = "graphviz"  # Not doing latex export, so graphviz is better
+    case _:
+        needs_flow_engine = "graphviz"  # More likely to be installed?
+
+
+
