@@ -32,12 +32,6 @@ jobs:
         run: |
           pip install .[docs]
 
-      - name: Build Single HTML doc
-        run: sphinx-build -b singlehtml docs/source docs/build/singlehtml
-
-      - name: Inline HTML
-        run: python -m pynliner docs/build/singlehtml/index.html > docs/build/singlehtml/single_index.html
-
       - name: Build HTML docs
         run: sphinx-build -b html docs/source docs/build/html
 
@@ -61,12 +55,6 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: docs/build/html/
-
-      - name: Upload SingleHTML static files as artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: single-html
-          path: docs/build/singlehtml/single_index.html
 
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v7
@@ -96,4 +84,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+
 
