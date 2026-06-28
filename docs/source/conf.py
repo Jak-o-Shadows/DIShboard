@@ -75,8 +75,10 @@ match build_type:
         #extensions.append("sphinxcontrib.plantuml")
     case "html":
         needs_flow_engine = "graphviz"  # Not doing latex export, so graphviz is better
+        graphviz_output_format = "svg"
     case _:
         needs_flow_engine = "graphviz"  # More likely to be installed?
+        graphviz_output_format = "svg"
 
 
 
