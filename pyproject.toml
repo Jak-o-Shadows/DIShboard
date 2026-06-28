@@ -11,6 +11,16 @@ dependencies = [
     "pandas",
 ]
 
+[project.optional-dependencies]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+    "furo",
+    "sphinx-needs",
+    "sphinx-codelinks",
+    "sphinx-autoapi",
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
