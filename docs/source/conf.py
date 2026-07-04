@@ -8,6 +8,7 @@
 
 import os
 import sys
+import pathlib
 
 project = 'DIShboard'
 copyright = '2026, Jak-o-Shadows'
@@ -60,8 +61,29 @@ latex_additional_files = [
 ]
 
 latex_elements = {
-    'preamble': r'\input{custom_layout.tex}',
+    "preamble": r"""
+\usepackage{pdflscape}
+\usepackage{longtable}
+\input{custom_layout.tex}
+""",
 }
+
+def patch_latex_tables(app, exception):
+    if exception or app.builder.name != "latex":
+        return
+
+    tex_path = pathlib.Path(app.outdir) / "dishboard.tex"
+    if not tex_path.exists():
+        return
+
+    text = tex_path.read_text(encoding="utf-8")
+    text = text.replace(r"\begin{tabulary}", r"\clearpage\begin{landscape}\begin{longtable}")
+    text = text.replace(r"\end{tabulary}", r"\end{longtable}\end{landscape}\clearpage")
+    tex_path.write_text(text, encoding="utf-8")
+
+def setup(app):
+    app.connect("build-finished", patch_latex_tables)
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
