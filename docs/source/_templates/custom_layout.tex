@@ -1,16 +1,22 @@
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{pdflscape}
+\usepackage{etoolbox}
 \usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage{array}
 \usepackage{caption}
-\usepackage{geometry}
 \usepackage{ragged2e}
-
-\geometry{margin=1in}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5em}
 \renewcommand{\arraystretch}{1.05}
 \captionsetup{font=small,labelfont=bf,skip=4pt}
+
+% Put wide Sphinx tables on their own landscape A4 pages
+\AtBeginEnvironment{tabulary}{\clearpage\begin{landscape}}
+\AtEndEnvironment{tabulary}{\end{landscape}\clearpage}
+
+\AtBeginEnvironment{longtable}{\clearpage\begin{landscape}}
+\AtEndEnvironment{longtable}{\end{landscape}\clearpage}
 
 \setkeys{Gin}{width=\linewidth,keepaspectratio}
 

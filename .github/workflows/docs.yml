@@ -45,7 +45,7 @@ jobs:
           working_directory: docs/build/latex
           pre_compile: |
             tlmgr update --self
-            tlmgr install booktabs caption geometry ragged2e
+            tlmgr install booktabs caption geometry ragged2e pdflscape etoolbox
       - name: Upload HTML Artifact
         uses: actions/upload-artifact@v7
         with:
