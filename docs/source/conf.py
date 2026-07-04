@@ -9,7 +9,6 @@
 import os
 import sys
 
-
 project = 'DIShboard'
 copyright = '2026, Jak-o-Shadows'
 author = 'Jak-o-Shadows'
@@ -52,14 +51,23 @@ autoapi_options = [
 autoapi_keep_files = True
 autoapi_add_toctree_entry = False
 
+# -- Options for LaTeX output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-latex-output
 
+# Tell Sphinx where to find the extra LaTeX files
+latex_additional_files = [
+    '_templates/custom_layout.tex'
+]
+
+latex_elements = {
+    'preamble': r'\input{custom_layout.tex}',
+}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'furo'
 html_static_path = ['_static']
-
 
 # Sphinx-Needs configuration via ubCode
 # Need both for it to work with Sphinx, rather than just ubCode
