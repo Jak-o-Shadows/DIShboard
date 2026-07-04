@@ -45,8 +45,7 @@ jobs:
           working_directory: docs/build/latex
           pre_compile: |
             tlmgr update --self
-            tlmgr install adjustbox booktabs caption changepage geometry ragged2e
-
+            tlmgr install geometry booktabs caption tabularx ragged2e
       - name: Upload HTML Artifact
         uses: actions/upload-artifact@v7
         with:

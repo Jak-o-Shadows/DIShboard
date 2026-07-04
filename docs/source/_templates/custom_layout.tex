@@ -1,19 +1,20 @@
 \usepackage{graphicx}
-\usepackage{adjustbox}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{caption}
-\usepackage{changepage}
+\usepackage{geometry}
+\usepackage{ragged2e}
+
+\geometry{margin=1in}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5em}
 \renewcommand{\arraystretch}{1.05}
 \captionsetup{font=small,labelfont=bf,skip=4pt}
 
-% Keep body text narrow and readable; widen only figures/tables slightly
-\newenvironment{widecontent}
-  {\begin{adjustwidth}{-0.5in}{-0.5in}}
-  {\end{adjustwidth}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{C}{>{\Centering\arraybackslash}X}
 
 \setkeys{Gin}{width=\linewidth,keepaspectratio}
 
@@ -21,12 +22,3 @@
 \renewcommand{\includegraphics}[2][]{%
   \oldincludegraphics[#1, width=\linewidth, keepaspectratio]{#2}%
 }
-
-\BeforeBeginEnvironment{figure}{\begin{widecontent}\centering}
-\AfterEndEnvironment{figure}{\end{widecontent}}
-
-\BeforeBeginEnvironment{table}{\begin{widecontent}\centering}
-\AfterEndEnvironment{table}{\end{widecontent}}
-
-\BeforeBeginEnvironment{tabular}{\begin{adjustbox}{max width=\linewidth}}
-\AfterEndEnvironment{tabular}{\end{adjustbox}}
