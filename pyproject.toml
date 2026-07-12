@@ -29,7 +29,7 @@ build = [
 ]
 
 [tool.hatch.version]
-path = "src/dishboard/__init__.py"
+path = "src/__init__.py"
 
 [build-system]
 requires = ["hatchling"]
