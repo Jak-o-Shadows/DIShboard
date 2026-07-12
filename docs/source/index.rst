@@ -17,6 +17,43 @@ documentation for details.
 
    autodoc
 
+
+Introduction
+============
+
+
+
+
+
+
+User Guide
+==========
+
+DIShboard is packaged as an installable Python library
+
+Installation
+------------
+
+:code:`pip install -e .`
+
+Setup
+-----
+
+First time setup must setup the database
+
+ * :code:`python manage.py makemigrations dishboard`
+ * :code:`python manage.py migrate`
+
+
+Running
+-------
+
+Must start both the GUI, and database workers
+
+ * :code:`python manage.py runserver`
+ * (Repeat 2+ times) :code:`python manage.py dbworker`
+
+
 Project Requirements
 ====================
 
