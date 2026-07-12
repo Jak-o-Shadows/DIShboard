@@ -1,6 +1,7 @@
 [project]
 name = "dishboard"
 description = "Distributed Interactive Simulation (DIS) Dashboard"
+dynamic = ["version"]
 readme = "docs/source/index.rst"
 requires-python = ">=3.11.10"
 license = "LGPL-2.1-or-later"
