@@ -3,6 +3,14 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Auto-generated code
+src/board/pdu_models.py
+src/board/templates/pdus/partial_pdu_detail.html
+
+# Django Migrations & database
+src/board/migrations/*
+src/db.sqlite3*
+
 # C extensions
 *.so
 
@@ -186,7 +194,11 @@ cython_debug/
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
 #  and can be added to the global gitignore or merged into this file. However, if you prefer, 
 #  you could uncomment the following to ignore the entire vscode folder
-# .vscode/
+.vscode/
+
+# LLM/AI stuff
+.gemini/
+.continue/
 
 # Ruff stuff:
 .ruff_cache/
