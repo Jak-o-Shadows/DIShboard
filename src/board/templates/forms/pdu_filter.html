@@ -1,19 +1,29 @@
 <form hx-post="{% url 'board:dis_filter_update' %}" hx-target="#pdu-container" class="filter-form">
     {% csrf_token %}
 
-    <!-- PDU Type Section (Custom UI) -->
+    <!-- PDU Type Section -->
     <fieldset>
         <legend>PDU Protocol</legend>
         <label for="pdu-search">Search PDU Types</label>
-        <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..." hx-post="{% url 'board:dis_filter_add_pdu' %}" hx-target="#pdu-filter" hx-trigger="change">
+        
+        <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..." 
+               hx-post="{% url 'board:dis_filter_add_pdu' %}" 
+               hx-target="#pdu-filter" 
+               hx-trigger="change">
+        
         <datalist id="pdu-options">
-                {% for pdu in all_pdu_types %}<option value="{{ pdu }}">{% endfor %}
+            {% for pdu in all_pdu_types %}
+                <option value="{{ pdu }}">
+            {% endfor %}
         </datalist>
+
         <div class="tag-container" id="pdu-tags">
             {% for pdu in selected_pdus %}
                 <span class="tag">
                     {{ pdu }}
-                    <button type="button" class="remove-tag" hx-post="{% url 'board:dis_filter_remove_pdu' %}" hx-vals='{"pdu_name": "{{ pdu }}"}'
+                    <button type="button" class="remove-tag" 
+                            hx-post="{% url 'board:dis_filter_remove_pdu' %}" 
+                            hx-vals='{"pdu_name": "{{ pdu }}"}'
                             hx-target="#pdu-filter">×</button>
                 </span>
             {% endfor %}
@@ -62,5 +72,13 @@
         </label>
     </fieldset>
 
+    <script>
+        // Clear search input on HTMX swap
+        document.body.addEventListener('htmx:afterOnLoad', function(evt) {
+            if (evt.detail.target.id === 'pdu-filter') {
+                const searchInput = document.getElementById('pdu-search');
+                if (searchInput) searchInput.value = '';
+            }
+        });
+    </script>
 </form>
-

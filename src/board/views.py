@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import PduHub, IngestionState
 from .tasks import listen_for_dis_packets, send_test_pdus
 from .forms import PlaybackSenderForm, ConnectionSettingsForm, PduFilterForm
+from . import pdu_models
 from django.middleware.csrf import get_token
 from django.template.loader import render_to_string
 from django.http import HttpResponse
@@ -50,6 +51,7 @@ def dashboard(request):
         'csrf_token': get_token(request),
         'form_conn_settings': form_conn_settings,
         'form_pdu_filter': form_pdu_filter,
+        'all_pdu_types': _get_all_pdu_types(),
         'pdus': pdus,
         'pdu_count': PduHub.objects.count(),
     })
@@ -202,10 +204,4 @@ def _get_selected_pdus(request):
     return request.session.get('selected_pdus', [])
 
 def _get_all_pdu_types():
-    return [
-        'PDU Type 1',
-        'PDU Type 2',
-        'PDU Type 3',
-        'PDU Type 4',
-    ]
-
+    return pdu_models.PDU_TYPES

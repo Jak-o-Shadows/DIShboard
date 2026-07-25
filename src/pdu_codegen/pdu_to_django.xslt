@@ -7,6 +7,8 @@
 from django.db import models
 
 </xsl:text>
+
+    <!-- 1. Generate the classes -->
     <xsl:for-each select="class[initialValue/@name='pduType']">
       <xsl:text>class </xsl:text>
       <xsl:value-of select="@name" />
@@ -20,6 +22,17 @@ from django.db import models
 
 </xsl:text>
       </xsl:for-each>
+
+    <!-- 2. Generate the Registry List -->
+    <xsl:text>PDU_TYPES = [
+</xsl:text>
+    <xsl:for-each select="class[initialValue/@name='pduType']">
+        <xsl:text>    '</xsl:text>
+        <xsl:value-of select="@name" />
+        <xsl:text>',
+</xsl:text>
+    </xsl:for-each>
+    <xsl:text>]</xsl:text>
   </xsl:template>
 
   <!-- Template to process attributes and flatten referenced classes -->
