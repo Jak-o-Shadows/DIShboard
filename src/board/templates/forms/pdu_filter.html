@@ -1,26 +1,66 @@
 <form hx-post="{% url 'board:dis_filter_update' %}" hx-target="#pdu-container" class="filter-form">
-    {{ form_pdu_filter.non_field_errors }}
-    {{ form_pdu_filter.as_p }}
-    
-    <label for="{{ form_pdu_filter.pdu_type.id_for_label }}">PDU Types</label>
-    <div class="tag-container" id="pdu-tags">
-        <!-- Selected tags will appear here -->
-        {% for pdu in selected_pdus %}
-            <span class="tag">
-                {{ pdu }}
-                <button type="button" class="remove-tag" 
-                        hx-post="{% url 'board:dis_filter_remove_pdu' %}" 
-                        hx-vals='{"pdu_name": "{{ pdu }}"}'
-                        hx-target="#pdu-filter">×</button>
-            </span>
-        {% endfor %}
-    </div>
-    <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search PDU types..." 
-           hx-post="{% url 'board:dis_filter_add_pdu' %}" hx-target="#pdu-filter" hx-trigger="change">
-    
-    <datalist id="pdu-options">
-        {% for pdu in all_pdu_types %}
-            <option value="{{ pdu }}">
-        {% endfor %}
-    </datalist>
+    {% csrf_token %}
+
+    <!-- PDU Type Section (Custom UI) -->
+    <fieldset>
+        <legend>PDU Protocol</legend>
+        <label for="pdu-search">Search PDU Types</label>
+        <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..." hx-post="{% url 'board:dis_filter_add_pdu' %}" hx-target="#pdu-filter" hx-trigger="change">
+        <datalist id="pdu-options">
+                {% for pdu in all_pdu_types %}<option value="{{ pdu }}">{% endfor %}
+        </datalist>
+        <div class="tag-container" id="pdu-tags">
+            {% for pdu in selected_pdus %}
+                <span class="tag">
+                    {{ pdu }}
+                    <button type="button" class="remove-tag" hx-post="{% url 'board:dis_filter_remove_pdu' %}" hx-vals='{"pdu_name": "{{ pdu }}"}'
+                            hx-target="#pdu-filter">×</button>
+                </span>
+            {% endfor %}
+        </div>
+    </fieldset>
+
+    <!-- Temporal Section -->
+    <fieldset>
+        <legend>Temporal</legend>
+        <div class="grid">
+            <div>{{ form_pdu_filter.start_time.label_tag }}{{ form_pdu_filter.start_time }}</div>
+            <div>{{ form_pdu_filter.end_time.label_tag }}{{ form_pdu_filter.end_time }}</div>
+        </div>
+    </fieldset>
+
+    <!-- Tactical Section -->
+    <fieldset>
+        <legend>Tactical</legend>
+        <div class="grid">
+            <div>{{ form_pdu_filter.force_id.label_tag }}{{ form_pdu_filter.force_id }}</div>
+            <div>{{ form_pdu_filter.site_id.label_tag }}{{ form_pdu_filter.site_id }}</div>
+        </div>
+        <div class="grid">
+            <div>{{ form_pdu_filter.application_id.label_tag }}{{ form_pdu_filter.application_id }}</div>
+            <div>{{ form_pdu_filter.exercise_id.label_tag }}{{ form_pdu_filter.exercise_id }}</div>
+        </div>
+    </fieldset>
+
+    <!-- Entity Section -->
+    <fieldset>
+        <legend>Entity</legend>
+        <div>{{ form_pdu_filter.entity_id.label_tag }}{{ form_pdu_filter.entity_id }}</div>
+        <div class="grid">
+            <div>{{ form_pdu_filter.entity_kind.label_tag }}{{ form_pdu_filter.entity_kind }}</div>
+            <div>{{ form_pdu_filter.entity_domain.label_tag }}{{ form_pdu_filter.entity_domain }}</div>
+        </div>
+        <div>{{ form_pdu_filter.entity_category.label_tag }}{{ form_pdu_filter.entity_category }}</div>
+    </fieldset>
+
+    <!-- Diagnostic Section -->
+    <fieldset>
+        <legend>Diagnostic</legend>
+        <div>{{ form_pdu_filter.raw_sql.label_tag }}{{ form_pdu_filter.raw_sql }}</div>
+        <label>
+            {{ form_pdu_filter.show_malformed }} {{ form_pdu_filter.show_malformed.label }}
+        </label>
+    </fieldset>
+
 </form>
+

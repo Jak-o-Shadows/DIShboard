@@ -41,6 +41,11 @@ class ConnectionSettingsForm(forms.Form):
     )
 
 class PduFilterForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': ''}) # Keep blank for Pico default styling
+
     # @PDU Type Filter, SPEC_FILTER_PROTOCOL, code_impl, SPEC_FILTER_PROTOCOL
     pdu_type = forms.MultipleChoiceField(
         label='PDU Type',
