@@ -180,7 +180,7 @@ def dis_filter_add_pdu(request):
         request.session['selected_pdus'] = selected
 
     return render_to_string('forms/pdu_filter.html', {
-        'form': PduFilterForm(initial={'pdu_type': selected}),
+        'form_pdu_filter': PduFilterForm(initial={'pdu_type': selected}),
         'selected_pdus': selected,
         'all_pdu_types': _get_all_pdu_types(),
     })
@@ -196,6 +196,7 @@ def dis_filter_remove_pdu(request):
         request.session['selected_pdus'] = selected
 
     return render_to_string('forms/pdu_filter.html', {
+        'form_pdu_filter': PduFilterForm(initial={'pdu_type': selected}),
         'selected_pdus': _get_selected_pdus(request),
         'all_pdu_types': _get_all_pdu_types(),
     })
