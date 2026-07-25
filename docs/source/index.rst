@@ -51,7 +51,7 @@ Running
 Must start both the GUI, and database workers
 
  * :code:`python manage.py runserver`
- * (Repeat 2+ times) :code:`python manage.py dbworker`
+ * (Repeat 2+ times) :code:`python manage.py db_worker`
 
 
 Project Requirements
@@ -107,13 +107,13 @@ Analysis Capability
    :id: REQ_DCS_FILE_REPLAY
    :parent: REQ_ENGAGEMENT_BEHAVIOUR
 
-   Support replay of DCS recording files into the 3D operational view, translating file contents into platform state and event playback while preserving DIS filters.
+   Support replay of DCS recording files into the 3D operational view, translating file contents into platform state and event playback.
 
 .. req:: Replay SIMDIS ASI files
    :id: REQ_SIMDIS_ASI_REPLAY
    :parent: REQ_ENGAGEMENT_BEHAVIOUR
 
-   Support replay of SIMDIS ASI files into the 3D operational view, translating file contents into platform state and event playback while preserving DIS filters.
+   Support replay of SIMDIS ASI files into the 3D operational view, translating file contents into platform state and event playback.
 
 3D Operational Display
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -453,6 +453,12 @@ Other
 
    Support re-emitting persisted DIS messages over the network to a configurable endpoint for integration with external tools.
 
+.. req:: Allow filtering the DIS stream shown
+   :id: REQ_DIS_FILTERING
+   :parent: REQ_DIS_INVESTIGATION_TOOLS
+
+   Support filtering the DIS stream shown in the UI
+
 .. req:: Export filtered datasets
    :id: REQ_DATA_EXPORT
    :parent: REQ_DIS_INVESTIGATION_TOOLS
@@ -584,6 +590,50 @@ These implementation choices support the high-level requirements without being t
    :parent: REQ_SCHEMA_FLEXIBILITY, REQ_DIS_INVESTIGATION_TOOLS
 
    Use XSLT transformations to generate Django model code and summary field templates from the official DIS PDU XML specification to support maintainability and traceability.
+
+
+DIS Filtering
+~~~~~~~~~~~~~
+
+.. spec:: DIS Temporal Filtering
+   :id: SPEC_FILTER_DIS_TEMPORAL
+   :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
+
+   Support filtering of messages based on simulation time range or relative offsets during playback.
+
+.. spec:: DIS Team Filtering
+   :id: SPEC_FILTER_DIS_TEAM
+   :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
+
+   Support filtering by Force ID (Friendly, Hostile, Neutral),
+
+.. spec:: DIS Exercise Filtering
+   :id: SPEC_FILTER_DIS_EXERCISE
+   :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
+
+   Site ID, Application ID, and Exercise ID.
+
+.. spec:: DIS Entity Filtering
+   :id: SPEC_FILTER_DIS_ENTITY
+   :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
+
+   Support filtering by specific Entity IDs or entity classification (Kind, Domain, Category).
+
+.. spec:: DIS Protocol Data Unit Filtering
+   :id: SPEC_FILTER_DIS_PROTOCOL
+   :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
+
+   Support multi-select PDU type filtering and granular queries on specific PDU fields (e.g., altitude, velocity).
+
+.. spec:: RAW DIS SQL Filtering
+   :id: SPEC_FILTER_DIS_RAW
+   :parent: REQ_SQL_QUERY_MODEL, REQ_DIS_FILTERING
+
+   Support raw SQL queries for advanced manipulation and visibility into malformed or failed-parse packets.
+
+
+
+
 
 Range Tool
 ~~~~~~~~~~
