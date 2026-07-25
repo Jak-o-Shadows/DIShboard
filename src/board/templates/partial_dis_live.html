@@ -1,8 +1,13 @@
 <main id="dis-live">
     <header>
         <h1>DIS Live Stream</h1>
-        {% include 'ingestion_control.html' %}
     </header>
+    <section id="dis_ingestion">
+        <details>
+            <summary role="button" class="secondary">DIS Ingestion</summary>
+            {% include 'ingestion_control.html' %}
+        </details>
+    </section>
     <section id="pdu-filter">
         <details>
             <summary role="button" class="secondary">Filters</summary>
