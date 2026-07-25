@@ -38,19 +38,19 @@ jobs:
       - name: Build LaTeX docs
         run: sphinx-build -b latex docs/source docs/build/latex
 
-      - name: Compile LaTeX to PDF
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: dishboard.tex
-          working_directory: docs/build/latex
-          pre_compile: |
-            tlmgr update --self
-            tlmgr install booktabs caption geometry ragged2e pdflscape etoolbox
-      - name: Upload HTML Artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: html-docs
-          path: docs/build/html/
+#      - name: Compile LaTeX to PDF
+#        uses: xu-cheng/latex-action@v3
+#        with:
+#          root_file: dishboard.tex
+#          working_directory: docs/build/latex
+#          pre_compile: |
+#            tlmgr update --self
+#            tlmgr install booktabs caption geometry ragged2e pdflscape etoolbox
+#      - name: Upload HTML Artifact
+#        uses: actions/upload-artifact@v7
+#        with:
+#          name: html-docs
+#          path: docs/build/html/
 
       - name: Upload HTML static files as artifact
         id: deployment
@@ -58,11 +58,11 @@ jobs:
         with:
           path: docs/build/html/
 
-      - name: Upload PDF Artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: pdf-docs
-          path: docs/build/latex/*.pdf
+#      - name: Upload PDF Artifact
+#        uses: actions/upload-artifact@v7
+#        with:
+#          name: pdf-docs
+#          path: docs/build/latex/*.pdf
 
 
   # Deploy job
