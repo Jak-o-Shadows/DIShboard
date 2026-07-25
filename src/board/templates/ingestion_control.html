@@ -5,7 +5,7 @@
     </p>
     {% else %}
     <form hx-post="{% url 'board:start_ingestion' %}" hx-swap="outerHTML" hx-trigger="submit">
-        {{ form.as_p }}
+        {{ form_conn_settings.as_p }}
         <button type="submit">Start DIS ingestion</button>
     </form>
     {% endif %}

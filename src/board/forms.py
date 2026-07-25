@@ -39,3 +39,30 @@ class ConnectionSettingsForm(forms.Form):
         initial=3500,
         help_text='UDP port to receive DIS packets on.',
     )
+
+class PduFilterForm(forms.Form):
+    # @PDU Type Filter, SPEC_FILTER_PROTOCOL, code_impl, SPEC_FILTER_PROTOCOL
+    pdu_type = forms.MultipleChoiceField(
+        label='PDU Type',
+        required=False,
+    )
+
+    # @Time Range Filter, SPEC_FILTER_TEMPORAL, code_impl, SPEC_FILTER_TEMPORAL
+    start_time = forms.DateTimeField(required=False)
+    end_time = forms.DateTimeField(required=False)
+
+    # @Tactical Filter, SPEC_FILTER_TACTICAL, code_impl, SPEC_FILTER_TACTICAL
+    force_id = forms.ChoiceField(required=False)
+    site_id = forms.IntegerField(required=False)
+    application_id = forms.IntegerField(required=False)
+    exercise_id = forms.IntegerField(required=False)
+
+    # @Entity Filter, SPEC_FILTER_ENTITY, code_impl, SPEC_FILTER_ENTITY
+    entity_id = forms.IntegerField(required=False)
+    entity_kind = forms.ChoiceField(required=False)
+    entity_domain = forms.ChoiceField(required=False)
+    entity_category = forms.ChoiceField(required=False)
+
+    # @Diagnostic Filter, SPEC_FILTER_DIAGNOSTIC, code_impl, SPEC_FILTER_DIAGNOSTIC
+    raw_sql = forms.CharField(required=False)
+    show_malformed = forms.BooleanField(required=False)

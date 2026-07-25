@@ -1,0 +1,26 @@
+<form hx-post="{% url 'board:dis_filter_update' %}" hx-target="#pdu-container" class="filter-form">
+    {{ form_pdu_filter.non_field_errors }}
+    {{ form_pdu_filter.as_p }}
+    
+    <label for="{{ form_pdu_filter.pdu_type.id_for_label }}">PDU Types</label>
+    <div class="tag-container" id="pdu-tags">
+        <!-- Selected tags will appear here -->
+        {% for pdu in selected_pdus %}
+            <span class="tag">
+                {{ pdu }}
+                <button type="button" class="remove-tag" 
+                        hx-post="{% url 'board:dis_filter_remove_pdu' %}" 
+                        hx-vals='{"pdu_name": "{{ pdu }}"}'
+                        hx-target="#pdu-filter">×</button>
+            </span>
+        {% endfor %}
+    </div>
+    <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search PDU types..." 
+           hx-post="{% url 'board:dis_filter_add_pdu' %}" hx-target="#pdu-filter" hx-trigger="change">
+    
+    <datalist id="pdu-options">
+        {% for pdu in all_pdu_types %}
+            <option value="{{ pdu }}">
+        {% endfor %}
+    </datalist>
+</form>

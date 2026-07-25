@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import PduHub, IngestionState
 from .tasks import listen_for_dis_packets, send_test_pdus
-from .forms import PlaybackSenderForm, ConnectionSettingsForm
+from .forms import PlaybackSenderForm, ConnectionSettingsForm, PduFilterForm
 from django.middleware.csrf import get_token
 from django.template.loader import render_to_string
 from django.http import HttpResponse
@@ -41,11 +41,15 @@ def dashboard(request):
     """Main dashboard entry point."""
     # Fetch from the hub
     pdus = PduHub.objects.all().order_by('-timestamp')[:20]
-    form = ConnectionSettingsForm()
+    form_conn_settings = ConnectionSettingsForm()
+     # Inject PduFilterForm
+    form_pdu_filter = PduFilterForm(initial={'pdu_type': _get_selected_pdus(request)})
+
     return render_to_string('partial_dis_live.html', {
         'started': False,
         'csrf_token': get_token(request),
-        'form': form,
+        'form_conn_settings': form_conn_settings,
+        'form_pdu_filter': form_pdu_filter,
         'pdus': pdus,
         'pdu_count': PduHub.objects.count(),
     })
@@ -150,4 +154,58 @@ def connection_info(request):
         'connected': connected,
         'pdu_rate': pdu_rate,
     })
+
+# @PDU Filter Update, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
+@hx_or_full(template_name='base.html')
+def dis_filter_update(request):
+    # This would handle full form submission
+    return render_to_string('forms/pdu_filter.html', {
+        'selected_pdus': _get_selected_pdus(request),
+        'all_pdu_types': _get_all_pdu_types(),
+    })
+
+# @PDU Filter Add, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
+@hx_or_full(template_name='base.html')
+def dis_filter_add_pdu(request):
+    form = PduFilterForm(request.POST)
+    # Even if form isn't fully valid (e.g. other fields empty),
+    # we extract the pdu_type from the data
+    pdu = request.POST.get('pdu_search')
+    selected = _get_selected_pdus(request)
+    if pdu and pdu not in selected:
+    # Here we could validate against PduFilterForm.fields['pdu_type'].choices
+        selected.append(pdu)
+        request.session['selected_pdus'] = selected
+
+    return render_to_string('forms/pdu_filter.html', {
+        'form': PduFilterForm(initial={'pdu_type': selected}),
+        'selected_pdus': selected,
+        'all_pdu_types': _get_all_pdu_types(),
+    })
+
+# @PDU Filter Remove, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
+@hx_or_full(template_name='base.html')
+def dis_filter_remove_pdu(request):
+    # In the template we used hx-vals to pass pdu_name
+    pdu_name = request.POST.get('pdu_name')
+    selected = _get_selected_pdus(request)
+    if pdu_name in selected:
+        selected.remove(pdu_name)
+        request.session['selected_pdus'] = selected
+
+    return render_to_string('forms/pdu_filter.html', {
+        'selected_pdus': _get_selected_pdus(request),
+        'all_pdu_types': _get_all_pdu_types(),
+    })
+
+def _get_selected_pdus(request):
+    return request.session.get('selected_pdus', [])
+
+def _get_all_pdu_types():
+    return [
+        'PDU Type 1',
+        'PDU Type 2',
+        'PDU Type 3',
+        'PDU Type 4',
+    ]
 
