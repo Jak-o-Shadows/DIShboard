@@ -31,46 +31,54 @@
     </fieldset>
 
     <!-- Temporal Section -->
-    <fieldset>
-        <legend>Temporal</legend>
-        <div class="grid">
-            <div>{{ form_pdu_filter.start_time.label_tag }}{{ form_pdu_filter.start_time }}</div>
-            <div>{{ form_pdu_filter.end_time.label_tag }}{{ form_pdu_filter.end_time }}</div>
-        </div>
-    </fieldset>
+     <details>
+        <summary role="button" class="secondary">Temporal</summary>
+        <fieldset>
+            <div class="grid">
+                <div>{{ form_pdu_filter.start_time.label_tag }}{{ form_pdu_filter.start_time }}</div>
+                <div>{{ form_pdu_filter.end_time.label_tag }}{{ form_pdu_filter.end_time }}</div>
+            </div>
+        </fieldset>
+    </details>
 
     <!-- Tactical Section -->
-    <fieldset>
-        <legend>Tactical</legend>
-        <div class="grid">
-            <div>{{ form_pdu_filter.force_id.label_tag }}{{ form_pdu_filter.force_id }}</div>
-            <div>{{ form_pdu_filter.site_id.label_tag }}{{ form_pdu_filter.site_id }}</div>
-        </div>
-        <div class="grid">
-            <div>{{ form_pdu_filter.application_id.label_tag }}{{ form_pdu_filter.application_id }}</div>
-            <div>{{ form_pdu_filter.exercise_id.label_tag }}{{ form_pdu_filter.exercise_id }}</div>
-        </div>
-    </fieldset>
+     <details>
+        <summary role="button" class="secondary">Tactical</summary>
+        <fieldset>
+            <div class="grid">
+                <div>{{ form_pdu_filter.force_id.label_tag }}{{ form_pdu_filter.force_id }}</div>
+                <div>{{ form_pdu_filter.site_id.label_tag }}{{ form_pdu_filter.site_id }}</div>
+            </div>
+            <div class="grid">
+                <div>{{ form_pdu_filter.application_id.label_tag }}{{ form_pdu_filter.application_id }}</div>
+                <div>{{ form_pdu_filter.exercise_id.label_tag }}{{ form_pdu_filter.exercise_id }}</div>
+            </div>
+        </fieldset>
+    </details>
 
     <!-- Entity Section -->
-    <fieldset>
-        <legend>Entity</legend>
-        <div>{{ form_pdu_filter.entity_id.label_tag }}{{ form_pdu_filter.entity_id }}</div>
-        <div class="grid">
-            <div>{{ form_pdu_filter.entity_kind.label_tag }}{{ form_pdu_filter.entity_kind }}</div>
-            <div>{{ form_pdu_filter.entity_domain.label_tag }}{{ form_pdu_filter.entity_domain }}</div>
-        </div>
-        <div>{{ form_pdu_filter.entity_category.label_tag }}{{ form_pdu_filter.entity_category }}</div>
-    </fieldset>
+    <details>
+        <summary role="button" class="secondary">Entity</summary>
+        <fieldset>
+            <div>{{ form_pdu_filter.entity_id.label_tag }}{{ form_pdu_filter.entity_id }}</div>
+            <div class="grid">
+                <div>{{ form_pdu_filter.entity_kind.label_tag }}{{ form_pdu_filter.entity_kind }}</div>
+                <div>{{ form_pdu_filter.entity_domain.label_tag }}{{ form_pdu_filter.entity_domain }}</div>
+            </div>
+            <div>{{ form_pdu_filter.entity_category.label_tag }}{{ form_pdu_filter.entity_category }}</div>
+        </fieldset>
+    </details>
 
-    <!-- Diagnostic Section -->
-    <fieldset>
-        <legend>Diagnostic</legend>
-        <div>{{ form_pdu_filter.raw_sql.label_tag }}{{ form_pdu_filter.raw_sql }}</div>
-        <label>
-            {{ form_pdu_filter.show_malformed }} {{ form_pdu_filter.show_malformed.label }}
-        </label>
-    </fieldset>
+    <!-- Raw SQL -->
+    <details>
+        <summary role="button" class="secondary">Raw SQL</summary>
+        <fieldset>
+            <div>{{ form_pdu_filter.raw_sql.label_tag }}{{ form_pdu_filter.raw_sql }}</div>
+            <label>
+                {{ form_pdu_filter.show_malformed }} {{ form_pdu_filter.show_malformed.label }}
+            </label>
+        </fieldset>
+    </details>
 
     <script>
         // Clear search input on HTMX swap
@@ -82,3 +90,4 @@
         });
     </script>
 </form>
+

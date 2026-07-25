@@ -4,7 +4,10 @@
         {% include 'ingestion_control.html' %}
     </header>
     <section id="pdu-filter">
-        {% include 'forms/pdu_filter.html' %}
+        <details>
+            <summary role="button" class="secondary">Filters</summary>
+            {% include 'forms/pdu_filter.html' %}
+        </details>
     </section>
     <section id="dashboard-grid">
         <section>
