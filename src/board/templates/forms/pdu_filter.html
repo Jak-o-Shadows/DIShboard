@@ -1,14 +1,19 @@
-<form hx-post="{% url 'board:dis_filter_update' %}" hx-target="#pdu-container" class="filter-form">
-    {% csrf_token %}
+<form hx-get="{{ filter_action_url }}"
+      hx-target="main"
+      hx-select="#pdu-container"
+      hx-push-url="true"
+      class="filter-form"
+      method="GET"
+      id="pdu-filter">
 
     <!-- PDU Type Section -->
     <fieldset>
         <legend>PDU Protocol</legend>
         <label for="pdu-search">Search PDU Types</label>
-        
-        <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..." 
-               hx-post="{% url 'board:dis_filter_add_pdu' %}" 
-               hx-target="#pdu-filter" 
+
+        <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..."
+               hx-get="{% url 'board:dis_filter_add_pdu' %}"
+               hx-target="#pdu-filter"
                hx-trigger="change">
         
         <datalist id="pdu-options">
@@ -31,7 +36,7 @@
     </fieldset>
 
     <!-- Temporal Section -->
-     <details>
+    <details>
         <summary role="button" class="secondary">Temporal</summary>
         <fieldset>
             <div class="grid">
@@ -78,6 +83,9 @@
                 {{ form_pdu_filter.show_malformed }} {{ form_pdu_filter.show_malformed.label }}
             </label>
         </fieldset>
+    </details>
+
+    <button type="submit" class="primary">Apply Filters</button>
     </details>
 
     <script>

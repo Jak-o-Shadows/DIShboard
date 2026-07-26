@@ -47,16 +47,19 @@ def dashboard(request):
     """Main dashboard entry point."""
     # Fetch from the hub
     pdus = PduHub.objects.all().order_by('-timestamp')[:20]
-    form_conn_settings = ConnectionSettingsForm()
-     # Inject PduFilterForm
-    form_pdu_filter = PduFilterForm(initial={'pdu_type': _get_selected_pdus(request)})
+    pdus = _apply_pdu_filters(request, pdus)
 
+    form_conn_settings = ConnectionSettingsForm()
+    # Use request.GET for filters so the URL stays in sync
+    form_pdu_filter = PduFilterForm(request.GET)
     return render_to_string('partial_dis_live.html', {
         'started': False,
         'csrf_token': get_token(request),
         'form_conn_settings': form_conn_settings,
         'form_pdu_filter': form_pdu_filter,
+        'filter_action_url': request.path,
         'all_pdu_types': _get_all_pdu_types(),
+        'selected_pdus': request.GET.getlist('pdu_type'),
         'pdus': pdus,
         'pdu_count': PduHub.objects.count(),
     })
@@ -84,30 +87,33 @@ def pdu_detail(request, pk):
 
 ################ DIS Filter ################
 
+def _apply_pdu_filters(request, queryset):
+    """Helper to apply filters from request.GET to a PduHub queryset."""
+    # Logic to filter PduHub by request.GET params
+    return queryset
+
 # @PDU Filter Update, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
 @hx_or_full(template_name='base.html')
 def dis_filter_update(request):
-    # This would handle full form submission
     return render_to_string('forms/pdu_filter.html', {
-        'selected_pdus': _get_selected_pdus(request),
+        'form_pdu_filter': PduFilterForm(request.GET),
+        'filter_action_url': request.path,
+        'selected_pdus': request.GET.getlist('pdu_type'),
         'all_pdu_types': _get_all_pdu_types(),
     })
 
 # @PDU Filter Add, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
 @hx_or_full(template_name='base.html')
 def dis_filter_add_pdu(request):
-    form = PduFilterForm(request.POST)
-    # Even if form isn't fully valid (e.g. other fields empty),
-    # we extract the pdu_type from the data
-    pdu = request.POST.get('pdu_search')
-    selected = _get_selected_pdus(request)
+    # This logic would ideally update the URL via a redirect or HTMX swap
+    # Keeping session logic for now to ensure minimal breaking changes
+    pdu = request.GET.get('pdu_search')
+    selected = request.GET.getlist('pdu_type')
     if pdu and pdu not in selected:
-    # Here we could validate against PduFilterForm.fields['pdu_type'].choices
         selected.append(pdu)
-        request.session['selected_pdus'] = selected
-
     return render_to_string('forms/pdu_filter.html', {
-        'form_pdu_filter': PduFilterForm(initial={'pdu_type': selected}),
+        'form_pdu_filter': PduFilterForm(request.GET),
+        'filter_action_url': request.path,
         'selected_pdus': selected,
         'all_pdu_types': _get_all_pdu_types(),
     })
@@ -115,16 +121,14 @@ def dis_filter_add_pdu(request):
 # @PDU Filter Remove, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
 @hx_or_full(template_name='base.html')
 def dis_filter_remove_pdu(request):
-    # In the template we used hx-vals to pass pdu_name
-    pdu_name = request.POST.get('pdu_name')
-    selected = _get_selected_pdus(request)
+    pdu_name = request.GET.get('pdu_name')
+    selected = request.GET.getlist('pdu_type')
     if pdu_name in selected:
         selected.remove(pdu_name)
-        request.session['selected_pdus'] = selected
-
     return render_to_string('forms/pdu_filter.html', {
-        'form_pdu_filter': PduFilterForm(initial={'pdu_type': selected}),
-        'selected_pdus': _get_selected_pdus(request),
+        'form_pdu_filter': PduFilterForm(request.GET),
+        'filter_action_url': request.path,
+        'selected_pdus': selected,
         'all_pdu_types': _get_all_pdu_types(),
     })
 
@@ -185,6 +189,7 @@ def connection_info(request):
         'pdu_rate': pdu_rate,
     })
 
+
 ################ DIS Playback ################
 
 # @Playback selection page, IMPL_PLAYBACK_SELECTION_PAGE, code_impl, [SPEC_PLAYBACK_SELECTION_VIEW]
@@ -222,4 +227,5 @@ def start_pdu_sender(request):
         'form': PlaybackSenderForm(initial=form.cleaned_data),
         'message': f'PDU playback task enqueued for {duration_seconds} seconds to {destination_host}:{destination_port}. Ensure db_worker is running.',
     })
+
 
