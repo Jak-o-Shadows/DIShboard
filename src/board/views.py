@@ -1,17 +1,19 @@
+import datetime
+import functools
+
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import PduHub, IngestionState
-from .tasks import listen_for_dis_packets, send_test_pdus
-from .forms import PlaybackSenderForm, ConnectionSettingsForm, PduFilterForm
-from . import pdu_models
 from django.middleware.csrf import get_token
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.utils import timezone
-from datetime import timedelta
-import functools
 
-def _ingestion_task_is_running():
-    return IngestionState.objects.filter(running=True).exists()
+from .models import PduHub, IngestionState
+from .tasks import listen_for_dis_packets, send_test_pdus
+from . import pdu_models
+from .forms import PlaybackSenderForm, ConnectionSettingsForm, PduFilterForm
+
+
+################ Utility Functions ################
 
 def hx_or_full(template_name="base.html"):
     """Decorator for view functions that return an HTML fragment.
@@ -37,6 +39,9 @@ def hx_or_full(template_name="base.html"):
         return _wrapped
     return decorater
 
+
+################ Main DIS-Live page ################
+
 @hx_or_full(template_name='base.html')
 def dashboard(request):
     """Main dashboard entry point."""
@@ -55,35 +60,6 @@ def dashboard(request):
         'pdus': pdus,
         'pdu_count': PduHub.objects.count(),
     })
-
-# @Ingestion control API, IMPL_INGESTION_CONTROL_API, code_impl, [SPEC_TASK_CONTROL_API, SPEC_CONNECTION_INFORMATION]
-def start_ingestion(request):
-    if request.method == 'POST':
-        form = ConnectionSettingsForm(request.POST)
-        if form.is_valid():
-            listen_host = form.cleaned_data['listen_host']
-            listen_port = form.cleaned_data['listen_port']
-            listen_for_dis_packets.enqueue(listen_host=listen_host, port=listen_port)
-            ingestion_state, _ = IngestionState.objects.get_or_create(defaults={
-                'listen_host': listen_host,
-                'listen_port': listen_port,
-                'running': True,
-            })
-            ingestion_state.listen_host = listen_host
-            ingestion_state.listen_port = listen_port
-            ingestion_state.running = True
-            ingestion_state.save()
-
-            return render(request, 'ingestion_control.html', {
-                'started': True,
-                'listen_host': listen_host,
-                'listen_port': listen_port,
-            })
-        return render(request, 'ingestion_control.html', {
-            'started': False,
-            'form': form,
-        })
-    return redirect('dashboard')
 
 # @HTMX PDU list refresh endpoint, IMPL_HTMX_MESSAGE_LIST, code_impl, [SPEC_HTMX_INTERACTIONS, SPEC_MESSAGES_PAGE]
 @hx_or_full(template_name='base.html')
@@ -105,57 +81,8 @@ def pdu_detail(request, pk):
         'pdu': pdu,
     })
 
-# @Playback selection page, IMPL_PLAYBACK_SELECTION_PAGE, code_impl, [SPEC_PLAYBACK_SELECTION_VIEW]
-@hx_or_full(template_name='base.html')
-def playback_selection(request):
-    form = PlaybackSenderForm()
-    return render_to_string('partial_playback_selection.html', {
-        'form': form,
-        'message': None,
-    })
 
-# @Playback sender task trigger, IMPL_PLAYBACK_SENDER_TRIGGER, code_impl, [SPEC_PLAYBACK_SELECTION_VIEW]
-@hx_or_full(template_name='base.html')
-def start_pdu_sender(request):
-    if request.method != 'POST':
-        return redirect('playback_selection')
-
-    form = PlaybackSenderForm(request.POST)
-    if not form.is_valid():
-        return render_to_string('partial_playback_selection.html', {
-            'form': form,
-            'message': 'Please fix the errors below.',
-        })
-
-    duration_seconds = form.cleaned_data['duration_seconds']
-    destination_host = form.cleaned_data['destination_host']
-    destination_port = form.cleaned_data['destination_port']
-
-    send_test_pdus.enqueue(
-        duration_seconds=duration_seconds,
-        destination_host=destination_host,
-        destination_port=destination_port,
-    )
-    return render_to_string('partial_playback_selection.html', {
-        'form': PlaybackSenderForm(initial=form.cleaned_data),
-        'message': f'PDU playback task enqueued for {duration_seconds} seconds to {destination_host}:{destination_port}. Ensure db_worker is running.',
-    })
-
-# @Connection information page, IMPL_CONNECTION_INFORMATION, code_impl, [SPEC_CONNECTION_INFORMATION]
-@hx_or_full(template_name='base.html')
-def connection_info(request):
-    connected = _ingestion_task_is_running()
-
-    recent_period_s = 5
-    recent_window = timezone.now() - timedelta(seconds=recent_period_s)
-    # Query the hub for rate
-    recent_count = PduHub.objects.filter(timestamp__gte=recent_window).count()
-    pdu_rate = recent_count / recent_period_s
-
-    return render_to_string('partial_connection_info.html', {
-        'connected': connected,
-        'pdu_rate': pdu_rate,
-    })
+################ DIS Filter ################
 
 # @PDU Filter Update, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
 @hx_or_full(template_name='base.html')
@@ -206,3 +133,93 @@ def _get_selected_pdus(request):
 
 def _get_all_pdu_types():
     return pdu_models.PDU_TYPES
+
+
+################ DIS Live Ingestion ################
+
+def _ingestion_task_is_running():
+    return IngestionState.objects.filter(running=True).exists()
+
+# @Ingestion control API, IMPL_INGESTION_CONTROL_API, code_impl, [SPEC_TASK_CONTROL_API, SPEC_CONNECTION_INFORMATION]
+def start_ingestion(request):
+    if request.method == 'POST':
+        form = ConnectionSettingsForm(request.POST)
+        if form.is_valid():
+            listen_host = form.cleaned_data['listen_host']
+            listen_port = form.cleaned_data['listen_port']
+            listen_for_dis_packets.enqueue(listen_host=listen_host, port=listen_port)
+            ingestion_state, _ = IngestionState.objects.get_or_create(defaults={
+                'listen_host': listen_host,
+                'listen_port': listen_port,
+                'running': True,
+            })
+            ingestion_state.listen_host = listen_host
+            ingestion_state.listen_port = listen_port
+            ingestion_state.running = True
+            ingestion_state.save()
+
+            return render(request, 'ingestion_control.html', {
+                'started': True,
+                'listen_host': listen_host,
+                'listen_port': listen_port,
+            })
+        return render(request, 'ingestion_control.html', {
+            'started': False,
+            'form': form,
+        })
+    return redirect('dashboard')
+
+# @Connection information page, IMPL_CONNECTION_INFORMATION, code_impl, [SPEC_CONNECTION_INFORMATION]
+@hx_or_full(template_name='base.html')
+def connection_info(request):
+    connected = _ingestion_task_is_running()
+
+    recent_period_s = 5
+    recent_window = timezone.now() - datetime.timedelta(seconds=recent_period_s)
+    # Query the hub for rate
+    recent_count = PduHub.objects.filter(timestamp__gte=recent_window).count()
+    pdu_rate = recent_count / recent_period_s
+
+    return render_to_string('partial_connection_info.html', {
+        'connected': connected,
+        'pdu_rate': pdu_rate,
+    })
+
+################ DIS Playback ################
+
+# @Playback selection page, IMPL_PLAYBACK_SELECTION_PAGE, code_impl, [SPEC_PLAYBACK_SELECTION_VIEW]
+@hx_or_full(template_name='base.html')
+def playback_selection(request):
+    form = PlaybackSenderForm()
+    return render_to_string('partial_playback_selection.html', {
+        'form': form,
+        'message': None,
+    })
+
+# @Playback sender task trigger, IMPL_PLAYBACK_SENDER_TRIGGER, code_impl, [SPEC_PLAYBACK_SELECTION_VIEW]
+@hx_or_full(template_name='base.html')
+def start_pdu_sender(request):
+    if request.method != 'POST':
+        return redirect('playback_selection')
+
+    form = PlaybackSenderForm(request.POST)
+    if not form.is_valid():
+        return render_to_string('partial_playback_selection.html', {
+            'form': form,
+            'message': 'Please fix the errors below.',
+        })
+
+    duration_seconds = form.cleaned_data['duration_seconds']
+    destination_host = form.cleaned_data['destination_host']
+    destination_port = form.cleaned_data['destination_port']
+
+    send_test_pdus.enqueue(
+        duration_seconds=duration_seconds,
+        destination_host=destination_host,
+        destination_port=destination_port,
+    )
+    return render_to_string('partial_playback_selection.html', {
+        'form': PlaybackSenderForm(initial=form.cleaned_data),
+        'message': f'PDU playback task enqueued for {duration_seconds} seconds to {destination_host}:{destination_port}. Ensure db_worker is running.',
+    })
+
