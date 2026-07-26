@@ -625,6 +625,12 @@ DIS Filtering
 
    Support multi-select PDU type filtering and granular queries on specific PDU fields (e.g., altitude, velocity).
 
+.. spec:: PDU filtering UI tags
+   :id: SPEC_FILTER_DIS_PROTOCOL_TAGS
+   :parent: SPEC_FILTER_DIS_PROTOCOL
+
+   Implement a tag-based UI for PDU type filtering. Selecting a PDU type from a dropdown should immediately add it as a removable "tag" or "pill" in the UI.
+
 .. spec:: RAW DIS SQL Filtering
    :id: SPEC_FILTER_DIS_RAW
    :parent: REQ_SQL_QUERY_MODEL, REQ_DIS_FILTERING
