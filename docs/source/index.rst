@@ -595,6 +595,14 @@ These implementation choices support the high-level requirements without being t
 DIS Filtering
 ~~~~~~~~~~~~~
 
+.. spec:: DIS Filter UI Boolean Options
+   :id: SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS
+   :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
+
+   The DIS Filter UI must support adding filter options as boolean components to the SQL filter. ie. instead of a static list of filters, the user can add a filter for Force ID, then add another filter for Entity Type, and so on. The filters should be combined with AND or OR logic.
+
+   This would allow users to create complex queries without needing to know SQL, and would allow for a more flexible and powerful filtering experience. An example of this is filtering by Entity Type twice, allowing users to view only entities of two specific types.
+
 .. spec:: DIS Temporal Filtering
    :id: SPEC_FILTER_DIS_TEMPORAL
    :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
