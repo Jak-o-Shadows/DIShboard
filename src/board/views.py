@@ -50,6 +50,24 @@ def dashboard(request):
     form_conn_settings = ConnectionSettingsForm()
     # Use request.GET for filters so the URL stays in sync
     form_pdu_filter = PduFilterForm(request.GET)
+    
+    # Check if there are active fieldsets in URL and pre-hydrate them
+    active_fieldsets_html = ""
+    fieldset_slugs = request.GET.getlist('filter_type_select', '')
+    for fieldset_slug in fieldset_slugs:
+        print(f"Hydrating fieldset for slug: {fieldset_slug}")
+        # TODO: Consolidate the fieldset slugs with the other definitions of it
+        if fieldset_slug and fieldset_slug in ['protocol', 'temporal', 'tactical', 'entity', 'raw_sql']:
+            # Re-hydrate the fieldset on page load
+            field_options = _get_filter_field_options(fieldset_slug)
+            active_fieldsets_html += render_to_string('forms/pdu_filter_fieldset_partial.html', {
+                'fieldset_slug': fieldset_slug,
+                'field_options': field_options,
+                'form_pdu_filter': form_pdu_filter,
+                'all_pdu_types': _get_all_pdu_types(),
+                'selected_pdus': request.GET.getlist('pdu_type'),
+            })
+    
     return render_to_string('partial_dis_live.html', {
         'started': False,
         'csrf_token': get_token(request),
@@ -60,6 +78,7 @@ def dashboard(request):
         'selected_pdus': request.GET.getlist('pdu_type'),
         'pdus': pdus,
         'pdu_count': PduHub.objects.count(),
+        'active_fieldsets_html': active_fieldsets_html,
     })
 
 # @HTMX PDU list refresh endpoint, IMPL_HTMX_MESSAGE_LIST, code_impl, [SPEC_HTMX_INTERACTIONS, SPEC_MESSAGES_PAGE]

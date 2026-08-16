@@ -1,9 +1,19 @@
-<form hx-get="{% url 'board:dis_filter_add_fieldset' %}"
-      hx-target="#filter-fieldsets"
-      hx-swap="beforeend"
-      hx-include="this"
-      hx-trigger="submit"
-      >
+<div>
+    <script type="text/javascript">
+    function appendDisFilterTypeToUrl() {
+        const filterTypeSelect = document.getElementById('filter-type-select');
+        const selectedValue = filterTypeSelect.value;
+        
+        if (selectedValue) {
+            console.log('Selected filter type:', selectedValue);
+            const url = new URL(window.location);
+            url.searchParams.append('filter_type_select', selectedValue);
+            window.history.replaceState({}, '', url);
+            filterTypeSelect.value = ''; // Reset dropdown
+        }
+    }
+    </script>
+
     <label for="filter-type-select">Select filter type:</label>
     <select id="filter-type-select" name="filter_type_select">
         <option value="">Choose...</option>
@@ -14,5 +24,13 @@
         <option value="raw_sql">Raw SQL</option>
     </select>
 
-    <button type="submit">Add Filter</button>
-</form>
+    <button hx-get="{% url 'board:dis_filter_add_fieldset' %}"
+      hx-target="#filter-fieldsets"
+      hx-swap="beforeend"
+      hx-include="closest div"
+      hx-on:htmx:before-request="appendDisFilterTypeToUrl();"
+      hx-push-url="false"
+    >
+        Add Filter
+    </button>
+</div>

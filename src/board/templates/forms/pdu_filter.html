@@ -5,8 +5,6 @@
       method="GET"
       id="pdu-filter">
 
-    <input type="hidden" id="filter-builder-state" name="filter_builder_state" value="">
-
     <style>
         .filter-builder-option {
             margin-bottom: 0.75rem;
@@ -37,7 +35,7 @@
     {% include 'forms/pdu_filter_add_partial.html' %}
 
     <div id="filter-fieldsets">
-        <!-- Fieldsets will be added here dynamically -->
+        {{ active_fieldsets_html|safe }}
     </div>
 
     <button type="submit" class="primary">Apply Filters</button>
