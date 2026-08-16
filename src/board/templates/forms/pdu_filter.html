@@ -5,96 +5,41 @@
       method="GET"
       id="pdu-filter">
 
-    <!-- PDU Type Section -->
-    <fieldset>
-        <legend>PDU Protocol</legend>
-        <label for="pdu-search">Search PDU Types</label>
+    <input type="hidden" id="filter-builder-state" name="filter_builder_state" value="">
 
-        <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..."
-               hx-get="{% url 'board:dis_filter_add_pdu' %}"
-               hx-target="#pdu-filter"
-               hx-trigger="change">
-        
-        <datalist id="pdu-options">
-            {% for pdu in all_pdu_types %}
-                <option value="{{ pdu }}">
-            {% endfor %}
-        </datalist>
+    <style>
+        .filter-builder-option {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            border-left: 4px solid var(--pico-form-element-border-color, #b3b9c4);
+            border-radius: 0.5rem;
+            background-color: var(--pico-muted-color, #f8f9fa);
+        }
 
-        <div class="tag-container" id="pdu-tags">
-            {% for pdu in selected_pdus %}
-                <span class="tag">
-                    {{ pdu }}
-                    <button type="button" class="remove-tag" 
-                            hx-post="{% url 'board:dis_filter_remove_pdu' %}" 
-                            hx-vals='{"pdu_name": "{{ pdu }}"}'
-                            hx-target="#pdu-filter">×</button>
-                </span>
-            {% endfor %}
-        </div>
-    </fieldset>
+        .filter-builder-row-header {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
 
-    <!-- Temporal Section -->
-    <details>
-        <summary role="button" class="secondary">Temporal</summary>
-        <fieldset>
-            <div class="grid">
-                <div>{{ form_pdu_filter.start_time.label_tag }}{{ form_pdu_filter.start_time }}</div>
-                <div>{{ form_pdu_filter.end_time.label_tag }}{{ form_pdu_filter.end_time }}</div>
-            </div>
-        </fieldset>
-    </details>
+        .filter-logic-select {
+            min-width: 70px;
+            flex-shrink: 0;
+        }
 
-    <!-- Tactical Section -->
-     <details>
-        <summary role="button" class="secondary">Tactical</summary>
-        <fieldset>
-            <div class="grid">
-                <div>{{ form_pdu_filter.force_id.label_tag }}{{ form_pdu_filter.force_id }}</div>
-                <div>{{ form_pdu_filter.site_id.label_tag }}{{ form_pdu_filter.site_id }}</div>
-            </div>
-            <div class="grid">
-                <div>{{ form_pdu_filter.application_id.label_tag }}{{ form_pdu_filter.application_id }}</div>
-                <div>{{ form_pdu_filter.exercise_id.label_tag }}{{ form_pdu_filter.exercise_id }}</div>
-            </div>
-        </fieldset>
-    </details>
+        .filter-builder-row-body {
+            margin-top: 0.5rem;
+            margin-left: 1.5rem;
+        }
+    </style>
 
-    <!-- Entity Section -->
-    <details>
-        <summary role="button" class="secondary">Entity</summary>
-        <fieldset>
-            <div>{{ form_pdu_filter.entity_id.label_tag }}{{ form_pdu_filter.entity_id }}</div>
-            <div class="grid">
-                <div>{{ form_pdu_filter.entity_kind.label_tag }}{{ form_pdu_filter.entity_kind }}</div>
-                <div>{{ form_pdu_filter.entity_domain.label_tag }}{{ form_pdu_filter.entity_domain }}</div>
-            </div>
-            <div>{{ form_pdu_filter.entity_category.label_tag }}{{ form_pdu_filter.entity_category }}</div>
-        </fieldset>
-    </details>
+    {% include 'forms/pdu_filter_add_partial.html' %}
 
-    <!-- Raw SQL -->
-    <details>
-        <summary role="button" class="secondary">Raw SQL</summary>
-        <fieldset>
-            <div>{{ form_pdu_filter.raw_sql.label_tag }}{{ form_pdu_filter.raw_sql }}</div>
-            <label>
-                {{ form_pdu_filter.show_malformed }} {{ form_pdu_filter.show_malformed.label }}
-            </label>
-        </fieldset>
-    </details>
+    <div id="filter-fieldsets">
+        <!-- Fieldsets will be added here dynamically -->
+    </div>
 
     <button type="submit" class="primary">Apply Filters</button>
-    </details>
-
-    <script>
-        // Clear search input on HTMX swap
-        document.body.addEventListener('htmx:afterOnLoad', function(evt) {
-            if (evt.detail.target.id === 'pdu-filter') {
-                const searchInput = document.getElementById('pdu-search');
-                if (searchInput) searchInput.value = '';
-            }
-        });
-    </script>
 </form>
 

@@ -16,7 +16,5 @@ urlpatterns = [
     path('playback-selection/start-sender/', views.start_pdu_sender, name='start_pdu_sender'),
 
     # PDU Filter
-    path('dis-filter-update/', views.dis_filter_update, name="dis_filter_update"),
-    path('dis-filter-add-pdu/', views.dis_filter_add_pdu, name="dis_filter_add_pdu"),
-    path('dis-filter-remove-pdu/', views.dis_filter_remove_pdu, name="dis_filter_remove_pdu"),
+    path('dis-filter-add-fieldset/', views.dis_filter_add_fieldset, name="dis_filter_add_fieldset"),
 ]

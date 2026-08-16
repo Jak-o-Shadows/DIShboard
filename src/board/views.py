@@ -12,7 +12,6 @@ from .tasks import listen_for_dis_packets, send_test_pdus
 from . import pdu_models
 from .forms import PlaybackSenderForm, ConnectionSettingsForm, PduFilterForm
 
-
 ################ Utility Functions ################
 
 def hx_or_full(template_name="base.html"):
@@ -38,7 +37,6 @@ def hx_or_full(template_name="base.html"):
             return HttpResponse(content)
         return _wrapped
     return decorater
-
 
 ################ Main DIS-Live page ################
 
@@ -84,60 +82,66 @@ def pdu_detail(request, pk):
         'pdu': pdu,
     })
 
-
 ################ DIS Filter ################
+# @PDU Filter Add, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
 
 def _apply_pdu_filters(request, queryset):
     """Helper to apply filters from request.GET to a PduHub queryset."""
     # Logic to filter PduHub by request.GET params
     return queryset
 
-# @PDU Filter Update, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
-@hx_or_full(template_name='base.html')
-def dis_filter_update(request):
-    return render_to_string('forms/pdu_filter.html', {
-        'form_pdu_filter': PduFilterForm(request.GET),
-        'filter_action_url': request.path,
-        'selected_pdus': request.GET.getlist('pdu_type'),
-        'all_pdu_types': _get_all_pdu_types(),
-    })
-
-# @PDU Filter Add, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
-@hx_or_full(template_name='base.html')
-def dis_filter_add_pdu(request):
-    # This logic would ideally update the URL via a redirect or HTMX swap
-    # Keeping session logic for now to ensure minimal breaking changes
-    pdu = request.GET.get('pdu_search')
-    selected = request.GET.getlist('pdu_type')
-    if pdu and pdu not in selected:
-        selected.append(pdu)
-    return render_to_string('forms/pdu_filter.html', {
-        'form_pdu_filter': PduFilterForm(request.GET),
-        'filter_action_url': request.path,
-        'selected_pdus': selected,
-        'all_pdu_types': _get_all_pdu_types(),
-    })
-
-# @PDU Filter Remove, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
-@hx_or_full(template_name='base.html')
-def dis_filter_remove_pdu(request):
-    pdu_name = request.GET.get('pdu_name')
-    selected = request.GET.getlist('pdu_type')
-    if pdu_name in selected:
-        selected.remove(pdu_name)
-    return render_to_string('forms/pdu_filter.html', {
-        'form_pdu_filter': PduFilterForm(request.GET),
-        'filter_action_url': request.path,
-        'selected_pdus': selected,
-        'all_pdu_types': _get_all_pdu_types(),
-    })
-
-def _get_selected_pdus(request):
-    return request.session.get('selected_pdus', [])
-
 def _get_all_pdu_types():
     return pdu_models.PDU_TYPES
 
+
+def _get_filter_field_options(fieldset_slug):
+    options = {
+        'protocol': [
+            {'value': 'pdu_type', 'label': 'PDU Type', 'kind': 'text'},
+        ],
+        'temporal': [
+            {'value': 'start_time', 'label': 'Start Time', 'kind': 'datetime'},
+            {'value': 'end_time', 'label': 'End Time', 'kind': 'datetime'},
+        ],
+        'tactical': [
+            {'value': 'force_id', 'label': 'Force ID', 'kind': 'number'},
+            {'value': 'site_id', 'label': 'Site ID', 'kind': 'number'},
+            {'value': 'application_id', 'label': 'Application ID', 'kind': 'number'},
+            {'value': 'exercise_id', 'label': 'Exercise ID', 'kind': 'number'},
+        ],
+        'entity': [
+            {'value': 'entity_id', 'label': 'Entity ID', 'kind': 'number'},
+            {'value': 'entity_kind', 'label': 'Entity Kind', 'kind': 'text'},
+            {'value': 'entity_domain', 'label': 'Entity Domain', 'kind': 'text'},
+            {'value': 'entity_category', 'label': 'Entity Category', 'kind': 'text'},
+        ],
+        'raw_sql': [
+            {'value': 'raw_sql', 'label': 'Raw SQL', 'kind': 'text'},
+            {'value': 'show_malformed', 'label': 'Show Malformed', 'kind': 'boolean'},
+        ],
+    }
+    return options.get(fieldset_slug, [])
+
+
+@hx_or_full(template_name='base.html')
+def dis_filter_add_fieldset(request):
+    """Render a fieldset for the selected filter type."""
+    fieldset_slug = request.GET.get('filter_type_select', '')
+    if not fieldset_slug or fieldset_slug not in ['protocol', 'temporal', 'tactical', 'entity', 'raw_sql']:
+        return HttpResponse('')
+
+    field_options = _get_filter_field_options(fieldset_slug)
+    if not field_options:
+        return ""  # TODO: log a problem here, as we've got a weird fieldset.  # TODO: Check that this doesn't break things
+
+    context = {
+        'fieldset_slug': fieldset_slug,
+        'field_options': field_options,
+        'form_pdu_filter': PduFilterForm(),
+        'all_pdu_types': _get_all_pdu_types(),
+        'selected_pdus': request.GET.getlist('pdu_type'),
+    }
+    return render_to_string('forms/pdu_filter_fieldset_partial.html', context)
 
 ################ DIS Live Ingestion ################
 
@@ -189,7 +193,6 @@ def connection_info(request):
         'pdu_rate': pdu_rate,
     })
 
-
 ################ DIS Playback ################
 
 # @Playback selection page, IMPL_PLAYBACK_SELECTION_PAGE, code_impl, [SPEC_PLAYBACK_SELECTION_VIEW]
@@ -227,5 +230,4 @@ def start_pdu_sender(request):
         'form': PlaybackSenderForm(initial=form.cleaned_data),
         'message': f'PDU playback task enqueued for {duration_seconds} seconds to {destination_host}:{destination_port}. Ensure db_worker is running.',
     })
-
 

@@ -1,0 +1,71 @@
+<fieldset data-builder-slug="{{ fieldset_slug }}">
+    {% if fieldset_slug == 'protocol' %}
+        <legend>PDU Protocol</legend>
+    {% elif fieldset_slug == 'temporal' %}
+        <legend>Temporal</legend>
+    {% elif fieldset_slug == 'tactical' %}
+        <legend>Tactical</legend>
+    {% elif fieldset_slug == 'entity' %}
+        <legend>Entity</legend>
+    {% elif fieldset_slug == 'raw_sql' %}
+        <legend>Raw SQL</legend>
+    {% endif %}
+
+    <!-- Add the fieldset for the selected filter type -->
+    {% if fieldset_slug == 'protocol' %}
+        <label for="pdu-search">Search PDU Types</label>
+        <div id="pdu-type-manager" hx-target="this" hx-swap="outerHTML">
+            <input list="pdu-options" id="pdu-search" name="pdu_search" placeholder="Search..."
+                   hx-get="{% url 'board:dis_filter_add_pdu' %}"
+                   hx-trigger="change"
+                   hx-include="#pdu-filter">
+            <datalist id="pdu-options">
+                {% for pdu in all_pdu_types %}
+                    <option value="{{ pdu }}">
+                {% endfor %}
+            </datalist>
+            <div class="tag-container" id="pdu-tags">
+                {% for pdu in selected_pdus %}
+                    <span class="tag">
+                        {{ pdu }}
+                        <input type="hidden" name="pdu_type" value="{{ pdu }}">
+                        <button type="button" class="remove-tag"
+                                hx-get="{% url 'board:dis_filter_remove_pdu' %}?pdu_name={{ pdu }}"
+                                hx-trigger="click"
+                                hx-include="#pdu-filter">×</button>
+                    </span>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% elif fieldset_slug == 'temporal' %}
+        <div class="grid">
+            <div>{{ form_pdu_filter.start_time.label_tag }}{{ form_pdu_filter.start_time }}</div>
+            <div>{{ form_pdu_filter.end_time.label_tag }}{{ form_pdu_filter.end_time }}</div>
+        </div>
+
+    {% elif fieldset_slug == 'tactical' %}
+        <div class="grid">
+            <div>{{ form_pdu_filter.force_id.label_tag }}{{ form_pdu_filter.force_id }}</div>
+            <div>{{ form_pdu_filter.site_id.label_tag }}{{ form_pdu_filter.site_id }}</div>
+        </div>
+        <div class="grid">
+            <div>{{ form_pdu_filter.application_id.label_tag }}{{ form_pdu_filter.application_id }}</div>
+            <div>{{ form_pdu_filter.exercise_id.label_tag }}{{ form_pdu_filter.exercise_id }}</div>
+        </div>
+
+    {% elif fieldset_slug == 'entity' %}
+        <div>{{ form_pdu_filter.entity_id.label_tag }}{{ form_pdu_filter.entity_id }}</div>
+        <div class="grid">
+            <div>{{ form_pdu_filter.entity_kind.label_tag }}{{ form_pdu_filter.entity_kind }}</div>
+            <div>{{ form_pdu_filter.entity_domain.label_tag }}{{ form_pdu_filter.entity_domain }}</div>
+        </div>
+        <div>{{ form_pdu_filter.entity_category.label_tag }}{{ form_pdu_filter.entity_category }}</div>
+
+    {% elif fieldset_slug == 'raw_sql' %}
+        <div>{{ form_pdu_filter.raw_sql.label_tag }}{{ form_pdu_filter.raw_sql }}</div>
+        <label for="{{ form_pdu_filter.show_malformed.id_for_label }}">
+            {{ form_pdu_filter.show_malformed }} {{ form_pdu_filter.show_malformed.label }}
+        </label>
+    {% endif %}
+</fieldset>

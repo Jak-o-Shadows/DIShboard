@@ -1,0 +1,18 @@
+<form hx-get="{% url 'board:dis_filter_add_fieldset' %}"
+      hx-target="#filter-fieldsets"
+      hx-swap="beforeend"
+      hx-include="this"
+      hx-trigger="submit"
+      >
+    <label for="filter-type-select">Select filter type:</label>
+    <select id="filter-type-select" name="filter_type_select">
+        <option value="">Choose...</option>
+        <option value="protocol">PDU Protocol</option>
+        <option value="temporal">Temporal</option>
+        <option value="tactical">Tactical</option>
+        <option value="entity">Entity</option>
+        <option value="raw_sql">Raw SQL</option>
+    </select>
+
+    <button type="submit">Add Filter</button>
+</form>

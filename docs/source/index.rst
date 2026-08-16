@@ -41,8 +41,8 @@ Setup
 
 First time setup must setup the database
 
- * :code:`python manage.py makemigrations dishboard`
- * :code:`python manage.py migrate`
+* :code:`python manage.py makemigrations dishboard`
+* :code:`python manage.py migrate`
 
 
 Running
