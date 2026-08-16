@@ -603,6 +603,8 @@ DIS Filtering
 
    This would allow users to create complex queries without needing to know SQL, and would allow for a more flexible and powerful filtering experience. An example of this is filtering by Entity Type twice, allowing users to view only entities of two specific types.
 
+   Each filter option should be made up of a header section - whereupon the filter type is selected from a dropdown, and an AND or OR is selected. The body section of the filter option should be specific to the filter type. The header section should be one row, and the body a second (or possibly more).
+
 .. spec:: DIS Temporal Filtering
    :id: SPEC_FILTER_DIS_TEMPORAL
    :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING

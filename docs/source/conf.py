@@ -93,8 +93,8 @@ html_static_path = ['_static']
 
 # Sphinx-Needs configuration via ubCode
 # Need both for it to work with Sphinx, rather than just ubCode
-needs_from_toml = "ubproject.toml"
-src_trace_config_from_toml = "ubproject.toml"
+needs_from_toml = os.path.join("..", "..", "ubproject.toml")
+src_trace_config_from_toml = needs_from_toml
 
 # Must switch between graphviz & plantUML, depending on whether we are doing latex export or not
 build_type = sys.argv[2]  # This is not a great way, but is easy - see https://stackoverflow.com/a/65849575
