@@ -50,8 +50,8 @@ Running
 
 Must start both the GUI, and database workers
 
- * :code:`python manage.py runserver`
- * (Repeat 2+ times) :code:`python manage.py db_worker`
+* :code:`python manage.py runserver`
+* (Repeat 2+ times) :code:`python manage.py db_worker`
 
 
 Project Requirements
@@ -605,6 +605,8 @@ DIS Filtering
 
    Each filter option should be made up of a header section - whereupon the filter type is selected from a dropdown, and an AND or OR is selected. The body section of the filter option should be specific to the filter type. The header section should be one row, and the body a second (or possibly more).
 
+   Represent all filters as a nested boolean expression tree composed of group nodes (AND, OR, NOT) and condition nodes (field, comparator, value). This structure must support arbitrary nesting and precedence to express complex queries such as (A AND B) OR (C AND (D OR NOT E)).
+
 .. spec:: DIS Temporal Filtering
    :id: SPEC_FILTER_DIS_TEMPORAL
    :parent: REQ_PERSISTENCE, REQ_DIS_FILTERING
@@ -647,8 +649,41 @@ DIS Filtering
 
    Support raw SQL queries for advanced manipulation and visibility into malformed or failed-parse packets.
 
+.. spec:: DIS Filter canonical state via URL
+   :id: SPEC_FILTER_DIS_CANONICAL_URL_STATE
+   :parent: REQ_URL_STATE, REQ_DIS_FILTERING
 
+   Treat the page URL as the authoritative and complete representation of the current DIS filter state. All filter groups, conditions, operators, and ordering must be encoded in the querystring so any URL is fully shareable, bookmarkable, and rehydratable without client-side logic.
 
+.. spec:: Deterministic hierarchical URL schema
+   :id: SPEC_FILTER_DIS_URL_SCHEMA
+   :parent: SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS, SPEC_FILTER_DIS_CANONICAL_URL_STATE
+
+   Define a stable, hierarchical querystring key pattern that mirrors the boolean tree structure (e.g., g0_op=AND, g0_c0_field=force_id). Keys must remain stable across mutations, be human-readable, and support extensibility for new comparators, field types, and nested groups.
+
+.. spec:: Server-owned filter parsing and serialization
+   :id: SPEC_FILTER_DIS_PARSER_SERIALIZER
+   :parent: SPEC_FILTER_DIS_URL_SCHEMA, REQ_NAVIGABLE_WITHOUT_JS
+
+   The server must parse the querystring into the canonical boolean tree and serialize the tree back into the querystring. These operations must be deterministic and support round-trip equality so reloading any URL reproduces the exact same filter tree and UI state.
+
+.. spec:: Filter tree compiler
+   :id: SPEC_FILTER_DIS_COMPILER
+   :parent: SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS, REQ_SQL_QUERY_MODEL
+
+   Provide a compiler that converts the DIS boolean tree into the system's query representation (SQL AST or Django Q objects). The compiler must support nested logic, NOT groups, repeated conditions, and typed comparators to ensure accurate DIS message filtering.
+
+.. spec:: HTMX minimal mutation endpoints
+   :id: SPEC_FILTER_DIS_HTMX_ENDPOINTS
+   :parent: SPEC_HTMX_INTERACTIONS, SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS
+
+   Expose HTMX endpoints for minimal, stateless mutations to the DIS filter tree: add_group, add_condition, edit_node, remove_node, reorder_children. Each endpoint must return a server-rendered fragment and update the canonical URL so the filter remains fully rehydratable.
+
+.. spec:: No-JavaScript baseline for filter editing
+   :id: SPEC_FILTER_DIS_NO_JS
+   :parent: REQ_NAVIGABLE_WITHOUT_JS, REQ_WEB_FIRST_UX, SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS, SPEC_FILTER_DIS_HTMX_ENDPOINTS
+
+   All core filter operations (adding groups, adding conditions, editing values, removing nodes) must function via full-page requests that mutate the querystring. HTMX and JavaScript must be strictly progressive enhancement layered on top of this baseline.
 
 
 Range Tool
