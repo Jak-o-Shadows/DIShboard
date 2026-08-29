@@ -659,7 +659,23 @@ DIS Filtering
    :id: SPEC_FILTER_DIS_URL_SCHEMA
    :parent: SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS, SPEC_FILTER_DIS_CANONICAL_URL_STATE
 
-   Define a stable, hierarchical querystring key pattern that mirrors the boolean tree structure (e.g., g0_op=AND, g0_c0_field=force_id). Keys must remain stable across mutations, be human-readable, and support extensibility for new comparators, field types, and nested groups.
+   Define a stable, hierarchical querystring key pattern that mirrors the boolean tree structure (example below). Keys must remain stable across mutations, be human-readable, and support extensibility for new comparators, field types, and nested groups.
+
+   Specifically, it looks like:
+   ?type=group&op=AND&c=2 &fieldset=fa&fa_field1=field1_value&fa_field2=field2_value &type=group&op=OR&c=2 &fieldset=fb&fb_field1=field1_value&fb_field2=field2_value & fieldset=fc&fc_field1=field1_value&fc_field2=field2_value
+
+   This gives a tree structure of:
+   - AND
+      Fieldset A:
+          - field1 = field1_value
+          - field2 = field2_value
+      OR
+         Fieldset B:
+             - field1 = field1_value
+             - field2 = field2_value
+         Fieldset C:
+             - field1 = field1_value
+             - field2 = field2_value
 
 .. spec:: Server-owned filter parsing and serialization
    :id: SPEC_FILTER_DIS_PARSER_SERIALIZER
@@ -684,6 +700,44 @@ DIS Filtering
    :parent: REQ_NAVIGABLE_WITHOUT_JS, REQ_WEB_FIRST_UX, SPEC_FILTER_DIS_UI_BOOLEAN_OPTIONS, SPEC_FILTER_DIS_HTMX_ENDPOINTS
 
    All core filter operations (adding groups, adding conditions, editing values, removing nodes) must function via full-page requests that mutate the querystring. HTMX and JavaScript must be strictly progressive enhancement layered on top of this baseline.
+
+DIS Filter URL Grammar
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. spec:: DIS Filter URL token stream model
+   :id: SPEC_DIS_FILTER_URL_TOKEN_STREAM
+   :parent: SPEC_FILTER_DIS_URL_SCHEMA
+
+   Represent the filter expression as a linear, ordered token stream encoded in the page querystring. Each token corresponds to either a group node or a fieldset node. The meaning of the filter is derived from the order of tokens and the declared child counts of group nodes, enabling a depth-first reconstruction of the boolean expression tree.
+
+.. spec:: DIS Filter URL group node grammar
+   :id: SPEC_DIS_FILTER_GROUP_NODE
+   :parent: SPEC_DIS_FILTER_URL_TOKEN_STREAM
+
+   A group node is encoded as a cluster of key-value pairs beginning with type=group and declaring its boolean operator (op=AND|OR|NOT) and the number of child nodes (c=N). The parser must treat c as authoritative, consuming exactly N subsequent nodes as children of this group. Additional metadata keys may be included but must not affect structural parsing.
+
+.. spec:: DIS Filter URL fieldset node grammar
+   :id: SPEC_DIS_FILTER_FIELDSET_NODE
+   :parent: SPEC_DIS_FILTER_URL_TOKEN_STREAM
+
+   A fieldset node is encoded as a cluster of key-value pairs beginning with fieldset=<id> followed by one or more field/value pairs whose keys are specific to each fieldset. A fieldset node represents a leaf condition in the boolean expression tree. Its internal ordering does not affect tree structure.
+
+.. spec:: DIS Filter URL Depth-first parsing semantics
+   :id: SPEC_FILTER_DEPTH_FIRST_PARSING
+   :parent: SPEC_DIS_FILTER_URL_TOKEN_STREAM
+
+   The filter tree must be reconstructed using a depth-first recursive descent parser. When a group node is encountered, the parser reads its declared child count and recursively parses the next N nodes as its children. Fieldset nodes terminate recursion. The parser must consume tokens strictly in order, as ordering is semantically meaningful in this grammar.
+
+.. spec:: Structural invariants for positional grammar
+   :id: SPEC_FILTER_POSITIONAL_INVARIANTS
+   :parent: SPEC_FILTER_DEPTH_FIRST_PARSING
+
+   The positional grammar requires the following invariants:
+    1. The first token must be a group node, forming the root of the tree.
+    2. Every group node's declared child count must match the number of subsequent nodes consumed during parsing.
+    3. No additional tokens may appear after the root group's children have been fully parsed.
+    4. Reordering tokens changes the structure of the boolean tree.
+
 
 
 Range Tool
