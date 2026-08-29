@@ -1,7 +1,9 @@
+import pytest
+
 import board.logic as logic
 
 
-if __name__ == "__main__":
+def test_dis_filter_url_to_schema_and_back():
 
     query_str = "   ?type=group&op=AND&c=2 &fieldset=fa&fa_field1=field1_value&fa_field2=field2_value &type=group&op=OR&c=2 &fieldset=fb&fb_field1=field1_value&fb_field2=field2_value & fieldset=fc&fc_field1=field1_value&fc_field2=field2_value"
     query_str = query_str.replace(" ", "")
