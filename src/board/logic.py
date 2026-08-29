@@ -3,6 +3,7 @@ from pprint import pprint
 
 
 def _parse_node(nodes, loc):
+    # @Recursive descent parser for DIS filter tree, SPEC_FILTER_DEPTH_FIRST_PARSING, code_impl
     current_node = nodes[loc]
 
     num_children = int(current_node["data"].get("c", 0))
@@ -36,7 +37,7 @@ def dis_filter_url_to_schema(url):
                     })
                     current_node_data = {}
                 current_node_type = value
-                print(f"Starting new node of type: {current_node_type}")
+                #print(f"Starting new node of type: {current_node_type}")
             case _:
                 # It's a node data field
                 current_node_data[key] = value
@@ -49,24 +50,20 @@ def dis_filter_url_to_schema(url):
 
     if not nodes:
         raise ValueError("No nodes found in the URL schema.")
-    for node_idx, node in enumerate(nodes):
-        print(f"{node_idx} : {node}")
+
+    if nodes[0]["type"] != "group":
+        raise ValueError("Root node must be a group.")
+
+    #for node_idx, node in enumerate(nodes):
+    #    print(f"{node_idx} : {node}")
 
     # Step 2: Convert the nodes into the graph
-    root, loc = _parse_node(nodes, 0)
-
-    # Pretty print the tree for debug purposes
-    def print_tree(node, level=0):
-        indent = "  " * level
-        print(f"{indent}- {node['type']}: {node['data']}")
-        for child in node.get("children", []):
-            print_tree(child, level + 1)
-    print_tree(root)
+    root, _ = _parse_node(nodes, 0)
 
     return root
 
-
 def _stringify_node(node):
+    # @Recursive serialization of filter nodes, SPEC_FILTER_DIS_PARSER_SERIALIZER, code_impl
     if node["type"] == "group":
         type_str = "type"
     else:
@@ -81,8 +78,7 @@ def _stringify_node(node):
     return url_parts
 
 def dis_filter_schema_to_url(schema):
+    # @Convert boolean tree to URL string, SPEC_FILTER_DIS_URL_SCHEMA, code_impl
     # TODO: There is boudn to be a safe way of doing this, that properly escapes characters and the like
     url_parts = _stringify_node(schema)
     return "?" + "&".join(url_parts)
-
-
