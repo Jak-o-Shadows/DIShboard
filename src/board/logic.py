@@ -1,8 +1,26 @@
 
-from pprint import pprint
+import django.utils.http
 
+####################### DIS Filter ###############################
+"""Parse and serialize the URL representation of a DIS filter tree.
+
+The URL format is a depth-first token stream. Group nodes declare how many
+following nodes belong to them, while fieldset nodes represent leaf data.
+"""
 
 def _parse_node(nodes, loc):
+    """Parse one node and its declared descendants from a token stream.
+
+    Args:
+        nodes: Tokenized filter nodes containing ``type`` and ``data``.
+        loc: Index of the node to parse.
+
+    Returns:
+        The parsed node and the index of its last consumed token.
+
+    Raises:
+        ValueError: If a node declares more children than remain in the stream.
+    """
     # @Recursive descent parser for DIS filter tree, SPEC_FILTER_DEPTH_FIRST_PARSING, code_impl
     current_node = nodes[loc]
 
@@ -21,6 +39,18 @@ def _parse_node(nodes, loc):
 
 
 def dis_filter_url_to_schema(url):
+    """Convert URL query parameters into a nested DIS filter schema.
+
+    Args:
+        url: An iterable of ``(key, value)`` pairs from a filter query string.
+
+    Returns:
+        The root group node of the parsed filter schema. Nodes contain a
+        ``type`` and ``data`` mapping, and group nodes may contain ``children``.
+
+    Raises:
+        ValueError: If the input has no nodes or does not start with a group.
+    """
 
     # First step is to tokenize the URL into nodes.
     nodes = []
@@ -63,14 +93,21 @@ def dis_filter_url_to_schema(url):
     return root
 
 def _stringify_node(node):
+    """Serialize a filter node and its descendants into query components.
+
+    Args:
+        node: A filter schema node with ``type`` and ``data`` keys.
+
+    Returns:
+        A list of ``(key, value)`` pairs in depth-first order.
+    """
     # @Recursive serialization of filter nodes, SPEC_FILTER_DIS_PARSER_SERIALIZER, code_impl
     if node["type"] == "group":
         type_str = "type"
     else:
         type_str = "fieldset"
-    url_parts = [f"{type_str}={node['type']}"]
-    for key, value in node["data"].items():
-        url_parts.append(f"{key}={value}")
+    url_parts = [(type_str, node["type"])]
+    url_parts.extend(node["data"].items())
 
     for child in node.get("children", []):
         url_parts.extend(_stringify_node(child))
@@ -78,7 +115,14 @@ def _stringify_node(node):
     return url_parts
 
 def dis_filter_schema_to_url(schema):
+    """Convert a nested DIS filter schema into its URL query string.
+
+    Args:
+        schema: The root filter node to serialize.
+
+    Returns:
+        A query string beginning with ``?``.
+    """
     # @Convert boolean tree to URL string, SPEC_FILTER_DIS_URL_SCHEMA, code_impl
-    # TODO: There is boudn to be a safe way of doing this, that properly escapes characters and the like
     url_parts = _stringify_node(schema)
-    return "?" + "&".join(url_parts)
+    return "?" + django.utils.http.urlencode(url_parts)

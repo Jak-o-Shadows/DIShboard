@@ -59,6 +59,7 @@ def test_dis_filter_invalid_child_count_too_few():
         logic.dis_filter_url_to_schema(query_keyvals)
 
 def test_dis_filter_invalid_child_count_too_many():
+    # TODO: This is known to be failing! The logic to catch this is wholly unimplemented
     # A group declares 1 child but provides 2.
     # This should trigger an error because the parser will likely leave dangling tokens.
     query_str = "?type=group&op=AND&c=1&fieldset=fa&fa_f=1&fieldset=fb&fb_f=2"
