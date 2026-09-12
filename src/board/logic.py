@@ -126,3 +126,20 @@ def dis_filter_schema_to_url(schema):
     # @Convert boolean tree to URL string, SPEC_FILTER_DIS_URL_SCHEMA, code_impl
     url_parts = _stringify_node(schema)
     return "?" + django.utils.http.urlencode(url_parts)
+
+def dis_filter_debug_render(schema):
+    """Pretty print a DIS filter schema for debugging.
+
+    Parameters
+    ----------
+        schema: The root filter node to print.
+    """
+    def _print_node(node, level=0):
+        indent = "  " * level
+        s = f"{indent}- {node['type']}: {node['data']}"
+        for child in node.get("children", []):
+            s += "\n" + _print_node(child, level + 1)
+        return s
+
+    s = _print_node(schema)
+    return s

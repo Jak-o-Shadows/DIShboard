@@ -1,6 +1,11 @@
 import pytest
+import os
+
+import jinja2
 
 import board.logic as logic
+
+DIR_TEMPLATES = os.path.join(os.path.dirname(__file__), "../src/board/templates")  # TODO: this isn't correct for packagign
 
 def print_tree(node, level=0):
     """# Pretty print the tree for debug purposes"""
@@ -77,3 +82,35 @@ def test_dis_filter_malformed_structure():
 
     with pytest.raises(ValueError):
         logic.dis_filter_url_to_schema(query_keyvals)
+
+
+def test_dis_filter_render():
+    query_str = "?type=group&op=AND&c=2" \
+                    "&fieldset=temporal&start_time=2026-09-12T13:57:00Z&end_time=2026-09-12T14:57:00Z" \
+                    "&fieldset=raw_sql&raw_sql=TODO"
+
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(DIR_TEMPLATES))
+    template = env.get_template("dis_filter/pdu_filter_partial.html")
+
+    query_keyvals = [pair.split("=") for pair in query_str[1:].split("&")]
+
+    root = logic.dis_filter_url_to_schema(query_keyvals)
+
+    rendered_html = template.render(filter_schema=root)
+
+
+def test_dis_filter_debug_render():
+    query_str = "?type=group&op=AND&c=2" \
+                    "&fieldset=temporal&start_time=2026-09-12T13:57:00Z&end_time=2026-09-12T14:57:00Z" \
+                    "&fieldset=raw_sql&raw_sql=TODO"
+
+    query_keyvals = [pair.split("=") for pair in query_str[1:].split("&")]
+
+    root = logic.dis_filter_url_to_schema(query_keyvals)
+    debug_output = logic.dis_filter_debug_render(root)
+
+    expected = """- group: {'op': 'AND', 'c': '2'}
+  - temporal: {'start_time': '2026-09-12T13:57:00Z', 'end_time': '2026-09-12T14:57:00Z'}
+  - raw_sql: {'raw_sql': 'TODO'}"""
+
+    assert debug_output.strip() == expected.strip(), f"Expected:\n{expected}\n\nGot:\n{debug_output}"
