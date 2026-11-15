@@ -1,7 +1,7 @@
 import pytest
 import os
 
-import jinja2
+import django.template.loader
 
 import board.logic as logic
 
@@ -89,14 +89,22 @@ def test_dis_filter_render():
                     "&fieldset=temporal&start_time=2026-09-12T13:57:00Z&end_time=2026-09-12T14:57:00Z" \
                     "&fieldset=raw_sql&raw_sql=TODO"
 
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(DIR_TEMPLATES))
-    template = env.get_template("dis_filter/pdu_filter_partial.html")
 
     query_keyvals = [pair.split("=") for pair in query_str[1:].split("&")]
 
     root = logic.dis_filter_url_to_schema(query_keyvals)
 
-    rendered_html = template.render(filter_schema=root)
+    rendered_html = django.template.loader.render_to_string(
+        "dis_filter/pdu_filter_partial.html",
+        {"filter_schema": root}
+    )
+    assert rendered_html is not None, "Rendered HTML should not be None."
+    assert len(rendered_html) > 0, "Rendered HTML should not be empty."
+
+    with open("asdf.html", "w", encoding="utf-8") as f:
+        f.write(rendered_html)
+
+    assert rendered_html == "asdf", f"{rendered_html}"  # TODO: This is a placeholder assertion. Replace with actual expected output.
 
 
 def test_dis_filter_debug_render():

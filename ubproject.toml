@@ -141,3 +141,49 @@ field_list_indent = 2
 [server]
 # MCP server configuration
 index_on_save = true
+
+
+# [workflow] originally copy-pasted fromt he complete example on https://ubcode.useblocks.com/configuration/workflow.html#config-workflow
+[workflow]
+exempt_status = ["deprecated"]
+release_disallow_status = ["open"]
+orphan_exempt_types = ["release"]
+
+[workflow.lifecycle]
+states = ["open", "in_progress", "done"]
+transitions = [
+    { from = "open", to = "in_progress" },
+    { from = "in_progress", to = "done" },
+]
+
+[workflow.icons]
+requirement = "req"
+architecture = "arch"
+
+[[workflow.stages]]
+id = "requirements"
+produces = "requirement"
+author_skill = "author-requirement"
+
+[workflow.stages.route]
+scope = "stream"
+granularity = "per-root"
+path = "specs/{stream}/requirements.rst"
+
+[[workflow.stages.trace]]
+up = "user_story"
+link = "implements"
+
+[[workflow.stages]]
+id = "architecture"
+produces = "architecture"
+depends_on = ["requirements"]
+
+[workflow.stages.route]
+scope = "stream"
+granularity = "per-root"
+path = "specs/{stream}/architecture.rst"
+
+[[workflow.stages.trace]]
+up = "requirement"
+link = "implements"

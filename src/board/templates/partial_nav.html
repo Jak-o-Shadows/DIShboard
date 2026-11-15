@@ -15,7 +15,7 @@
     </ul>
     <div id="connection-info-panel"
          hx-get="{% url 'board:connection_info' %}"
-         hx-trigger="every 1s"
+         hx-trigger="every 60s"
          hx-swap="innerHTML">
         {% include "partial_connection_info.html" %}
     </div>

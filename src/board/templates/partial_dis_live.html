@@ -11,7 +11,7 @@
     <section id="pdu-filter">
         <details>
             <summary role="button" class="secondary">Filters</summary>
-            {% include 'forms/pdu_filter.html' %}
+            {% include 'dis_filter/pdu_filter_partial.html' %}
         </details>
     </section>
     <section id="dashboard-grid">
@@ -21,7 +21,7 @@
             </header>
             <section id="pdu-container"
                     hx-get="{% url 'board:pdu_list' %}"
-                    hx-trigger="every 5s"
+                    hx-trigger="every 50s"
                     hx-swap="innerHTML">
                 {% include 'pdus/partial_list.html' %}
             </section>

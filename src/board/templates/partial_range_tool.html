@@ -1,0 +1,36 @@
+<!-- partial_range_tool.html -->
+<article id="range-tool" class="range-tool">
+    <header>
+        <strong>Range Tool</strong>
+    </header>
+    <!-- Entity Selection -->
+    <div class="mb-4">
+        <label class="block text-sm font-medium">Select Entities</label>
+        <select multiple class="w-full border p-2" id="entity-selector">
+            <!-- Populated via JS/HTMX -->
+            <option>Entity 1 (F-16)</option>
+            <option>Entity 2 (SA-10)</option>
+        </select>
+    </div>
+
+    <!-- Calculation Selection -->
+    <div class="mb-4">
+        <label class="block text-sm font-medium">Calculation Type</label>
+        <select class="w-full border p-2" id="calc-selector">
+            <option value="slant">Slant Range</option>
+            <option value="bearing">Relative Bearing</option>
+            <option value="closure">Closure Rate</option>
+            <option value="tti">Time to Intercept</option>
+        </select>
+    </div>
+
+    <!-- Active Results -->
+    <div>
+        <label class="block text-sm font-medium">Active Results</label>
+        <div id="results-list" class="border p-2 min-h-[100px] bg-white">
+            <!-- Results injected here -->
+            <div class="text-sm border-b p-1">Slant Range: 12.4 nm</div>
+        </div>
+    </div>
+</article>
+

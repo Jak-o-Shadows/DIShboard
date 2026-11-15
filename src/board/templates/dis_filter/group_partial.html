@@ -1,0 +1,17 @@
+<fieldset class="dis-filter-group" data-filter-operator="{{ node.operator }}">
+    <legend>{{ node.operator }}</legend>
+
+    <div class="dis-filter-group-children">
+        {% for child in node.children %}
+            {% if child.type == "group" %}
+                {% include "dis_filter/group_partial.html" with node=child %}
+            {% else %}
+                {% include "forms/pdu_filter_fieldset_partial.html" with 
+                    fieldset_slug=child.fieldset_slug 
+                    form_pdu_filter=child.form_pdu_filter 
+                    selected_pdus=child.selected_pdus
+                %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</fieldset>

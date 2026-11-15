@@ -11,6 +11,7 @@ from .models import PduHub, IngestionState
 from .tasks import listen_for_dis_packets, send_test_pdus
 from . import pdu_models
 from .forms import PlaybackSenderForm, ConnectionSettingsForm, PduFilterForm
+from . import logic
 
 ################ Utility Functions ################
 
@@ -104,63 +105,84 @@ def pdu_detail(request, pk):
 ################ DIS Filter ################
 # @PDU Filter Add, IMPL_FILTER_PROTOCOL, code_impl, [SPEC_FILTER_PROTOCOL]
 
-def _apply_pdu_filters(request, queryset):
-    """Helper to apply filters from request.GET to a PduHub queryset."""
-    # Logic to filter PduHub by request.GET params
-    return queryset
+"""
+def dis_filter_add_group(request):
+    pass
 
-def _get_all_pdu_types():
-    return pdu_models.PDU_TYPES
+def dis_filter_add_condition(request):
+    pass
 
+def dis_filter_edit_node(request):
+    pass
 
-def _get_filter_field_options(fieldset_slug):
-    options = {
-        'protocol': [
-            {'value': 'pdu_type', 'label': 'PDU Type', 'kind': 'text'},
-        ],
-        'temporal': [
-            {'value': 'start_time', 'label': 'Start Time', 'kind': 'datetime'},
-            {'value': 'end_time', 'label': 'End Time', 'kind': 'datetime'},
-        ],
-        'tactical': [
-            {'value': 'force_id', 'label': 'Force ID', 'kind': 'number'},
-            {'value': 'site_id', 'label': 'Site ID', 'kind': 'number'},
-            {'value': 'application_id', 'label': 'Application ID', 'kind': 'number'},
-            {'value': 'exercise_id', 'label': 'Exercise ID', 'kind': 'number'},
-        ],
-        'entity': [
-            {'value': 'entity_id', 'label': 'Entity ID', 'kind': 'number'},
-            {'value': 'entity_kind', 'label': 'Entity Kind', 'kind': 'text'},
-            {'value': 'entity_domain', 'label': 'Entity Domain', 'kind': 'text'},
-            {'value': 'entity_category', 'label': 'Entity Category', 'kind': 'text'},
-        ],
-        'raw_sql': [
-            {'value': 'raw_sql', 'label': 'Raw SQL', 'kind': 'text'},
-            {'value': 'show_malformed', 'label': 'Show Malformed', 'kind': 'boolean'},
-        ],
-    }
-    return options.get(fieldset_slug, [])
+def dis_filter_remove_node(request):
+    pass
+
+def dis_filter_reorder_children(request):
+    pass
+"""
 
 
-@hx_or_full(template_name='base.html')
-def dis_filter_add_fieldset(request):
-    """Render a fieldset for the selected filter type."""
-    fieldset_slug = request.GET.get('filter_type_select', '')
-    if not fieldset_slug or fieldset_slug not in ['protocol', 'temporal', 'tactical', 'entity', 'raw_sql']:
-        return HttpResponse('')
 
-    field_options = _get_filter_field_options(fieldset_slug)
-    if not field_options:
-        return ""  # TODO: log a problem here, as we've got a weird fieldset.  # TODO: Check that this doesn't break things
 
-    context = {
-        'fieldset_slug': fieldset_slug,
-        'field_options': field_options,
-        'form_pdu_filter': PduFilterForm(),
-        'all_pdu_types': _get_all_pdu_types(),
-        'selected_pdus': request.GET.getlist('pdu_type'),
-    }
-    return render_to_string('forms/pdu_filter_fieldset_partial.html', context)
+
+# def _apply_pdu_filters(request, queryset):
+#     """Helper to apply filters from request.GET to a PduHub queryset."""
+#     # Logic to filter PduHub by request.GET params
+#     return queryset
+
+# def _get_all_pdu_types():
+#     return pdu_models.PDU_TYPES
+
+
+# def _get_filter_field_options(fieldset_slug):
+#     options = {
+#         'protocol': [
+#             {'value': 'pdu_type', 'label': 'PDU Type', 'kind': 'text'},
+#         ],
+#         'temporal': [
+#             {'value': 'start_time', 'label': 'Start Time', 'kind': 'datetime'},
+#             {'value': 'end_time', 'label': 'End Time', 'kind': 'datetime'},
+#         ],
+#         'tactical': [
+#             {'value': 'force_id', 'label': 'Force ID', 'kind': 'number'},
+#             {'value': 'site_id', 'label': 'Site ID', 'kind': 'number'},
+#             {'value': 'application_id', 'label': 'Application ID', 'kind': 'number'},
+#             {'value': 'exercise_id', 'label': 'Exercise ID', 'kind': 'number'},
+#         ],
+#         'entity': [
+#             {'value': 'entity_id', 'label': 'Entity ID', 'kind': 'number'},
+#             {'value': 'entity_kind', 'label': 'Entity Kind', 'kind': 'text'},
+#             {'value': 'entity_domain', 'label': 'Entity Domain', 'kind': 'text'},
+#             {'value': 'entity_category', 'label': 'Entity Category', 'kind': 'text'},
+#         ],
+#         'raw_sql': [
+#             {'value': 'raw_sql', 'label': 'Raw SQL', 'kind': 'text'},
+#             {'value': 'show_malformed', 'label': 'Show Malformed', 'kind': 'boolean'},
+#         ],
+#     }
+#     return options.get(fieldset_slug, [])
+
+
+# @hx_or_full(template_name='base.html')
+# def dis_filter_add_fieldset(request):
+#     """Render a fieldset for the selected filter type."""
+#     fieldset_slug = request.GET.get('filter_type_select', '')
+#     if not fieldset_slug or fieldset_slug not in ['protocol', 'temporal', 'tactical', 'entity', 'raw_sql']:
+#         return HttpResponse('')
+
+#     field_options = _get_filter_field_options(fieldset_slug)
+#     if not field_options:
+#         return ""  # TODO: log a problem here, as we've got a weird fieldset.  # TODO: Check that this doesn't break things
+
+#     context = {
+#         'fieldset_slug': fieldset_slug,
+#         'field_options': field_options,
+#         'form_pdu_filter': PduFilterForm(),
+#         'all_pdu_types': _get_all_pdu_types(),
+#         'selected_pdus': request.GET.getlist('pdu_type'),
+#     }
+#     return render_to_string('forms/pdu_filter_fieldset_partial.html', context)
 
 ################ DIS Live Ingestion ################
 

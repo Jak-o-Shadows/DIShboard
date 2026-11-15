@@ -42,5 +42,6 @@ path = "hatch_build.py"
 [tool.hatch.build.targets.sdist]
 sources = ["src/"]
 
-
-
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "dishboard.settings"
+pythonpath = ["src"]

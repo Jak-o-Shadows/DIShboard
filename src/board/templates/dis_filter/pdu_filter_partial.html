@@ -1,0 +1,14 @@
+<form id="pdu-filter" method="get">
+    {% if filter_form %}
+        {{ filter_form.filter_builder_state }}
+    {% endif %}
+
+    <div class="dis-filter-tree">
+        {% include "dis_filter/group_partial.html" with node=filter_tree %}
+    </div>
+
+    <div class="dis-filter-actions">
+        <button type="submit">Apply filters</button>
+        <a href="{{ filter_reset_url|default:'' }}">Reset</a>
+    </div>
+</form>
